@@ -1,0 +1,2692 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#050914" />
+  <title>STEM ARENA — Đấu Trường Trí Tuệ STEM & AI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&family=Space+Grotesk:wght@500;600;700&display=swap&subset=vietnamese" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-deep: #040812;
+      --bg-surface: rgba(10, 18, 34, 0.78);
+      --bg-elev: rgba(15, 25, 46, 0.9);
+      --border-glow: rgba(56, 189, 248, 0.24);
+      --border-subtle: rgba(148, 163, 184, 0.14);
+
+      --cyan: #22d3ee;
+      --cyan-deep: #06b6d4;
+      --emerald: #10b981;
+      --emerald-soft: #34d399;
+      --purple: #a855f7;
+      --purple-soft: #c084fc;
+      --orange: #fb923c;
+      --rose: #f43f5e;
+      --rose-soft: #fb7185;
+      --amber: #fbbf24;
+
+      --opt-a: #3b82f6;
+      --opt-b: #a855f7;
+      --opt-c: #f59e0b;
+      --opt-d: #10b981;
+
+      --text-primary: #f1f5f9;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+
+      --radius-lg: 20px;
+      --radius-md: 14px;
+      --radius-sm: 10px;
+
+      --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --font-display: 'Space Grotesk', 'Inter', sans-serif;
+      --font-mono: 'JetBrains Mono', ui-monospace, Consolas, monospace;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { -webkit-text-size-adjust: 100%; }
+
+    body {
+      font-family: var(--font-body);
+      background-color: var(--bg-deep);
+      color: var(--text-primary);
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    button { font: inherit; color: inherit; }
+    button:focus-visible, input:focus-visible {
+      outline: 2px solid var(--cyan);
+      outline-offset: 3px;
+    }
+
+    .hidden { display: none !important; }
+    .mono { font-family: var(--font-mono); }
+
+    /* ==================== AI NEURAL BACKGROUND ==================== */
+    .bg-layer { position: fixed; inset: 0; z-index: -2; pointer-events: none; }
+
+    .bg-gradient {
+      background:
+        radial-gradient(circle at 10% 12%, rgba(34, 211, 238, 0.16) 0%, transparent 38%),
+        radial-gradient(circle at 90% 18%, rgba(168, 85, 247, 0.16) 0%, transparent 40%),
+        radial-gradient(circle at 50% 100%, rgba(16, 185, 129, 0.1) 0%, transparent 45%),
+        var(--bg-deep);
+    }
+
+    .bg-grid {
+      background-size: 44px 44px;
+      background-image:
+        linear-gradient(to right, rgba(34, 211, 238, 0.05) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(34, 211, 238, 0.05) 1px, transparent 1px);
+      mask-image: radial-gradient(ellipse at center, #000 40%, transparent 85%);
+      -webkit-mask-image: radial-gradient(ellipse at center, #000 40%, transparent 85%);
+    }
+
+    #neuralCanvas { z-index: -1; opacity: 0.55; }
+
+    .bg-scan {
+      z-index: -1;
+      background: linear-gradient(to bottom, transparent 0%, rgba(34, 211, 238, 0.06) 50%, transparent 100%);
+      height: 30vh;
+      animation: scan 9s linear infinite;
+    }
+
+    @keyframes scan {
+      from { transform: translateY(-30vh); }
+      to { transform: translateY(110vh); }
+    }
+
+    /* ==================== HEADER ==================== */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      background: rgba(4, 8, 18, 0.8);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border-glow);
+    }
+
+    .header-inner {
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: 0.75rem 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+      text-align: left;
+      border-radius: 12px;
+      min-width: 0;
+    }
+
+    .brand-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--cyan-deep), var(--purple));
+      display: grid;
+      place-items: center;
+      box-shadow: 0 0 18px rgba(34, 211, 238, 0.45);
+      flex-shrink: 0;
+    }
+
+    .brand-icon svg { animation: spin 14s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .brand-title {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1.2rem;
+      letter-spacing: 0.06em;
+      background: linear-gradient(90deg, #38bdf8, #c084fc, #34d399);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+      line-height: 1.1;
+    }
+
+    .brand-sub {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      color: var(--text-secondary);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .header-right { display: flex; align-items: center; gap: 0.5rem; }
+
+    .status-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.38rem 0.8rem;
+      border-radius: 999px;
+      background: rgba(34, 211, 238, 0.1);
+      border: 1px solid rgba(34, 211, 238, 0.32);
+      color: #67e8f9;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--emerald);
+      box-shadow: 0 0 8px var(--emerald);
+      animation: pulse 1.8s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(1.35); }
+    }
+
+    .icon-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 11px;
+      display: grid;
+      place-items: center;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid var(--border-glow);
+      cursor: pointer;
+      color: var(--text-secondary);
+      transition: all 0.18s ease;
+      flex-shrink: 0;
+    }
+
+    .icon-btn:hover { color: var(--cyan); border-color: var(--cyan); }
+
+    @media (max-width: 560px) {
+      .status-chip { display: none; }
+      .brand-sub { display: none; }
+    }
+
+    /* ==================== LAYOUT ==================== */
+    main {
+      flex: 1;
+      max-width: 1160px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 1.5rem 1rem 2.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .view { animation: viewIn 0.35s ease; }
+    @keyframes viewIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: none; }
+    }
+
+    .card {
+      background: var(--bg-surface);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--border-glow);
+      border-radius: var(--radius-lg);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--cyan), var(--purple), var(--emerald), transparent);
+    }
+
+    /* corner brackets for HUD feel */
+    .card.hud-corners::after {
+      content: '';
+      position: absolute;
+      inset: 8px;
+      pointer-events: none;
+      background:
+        linear-gradient(var(--cyan), var(--cyan)) top left / 14px 2px no-repeat,
+        linear-gradient(var(--cyan), var(--cyan)) top left / 2px 14px no-repeat,
+        linear-gradient(var(--cyan), var(--cyan)) bottom right / 14px 2px no-repeat,
+        linear-gradient(var(--cyan), var(--cyan)) bottom right / 2px 14px no-repeat;
+      opacity: 0.55;
+    }
+
+    .pad { padding: 1.85rem; }
+    @media (max-width: 600px) { .pad { padding: 1.2rem; } }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 1.5rem;
+      align-items: start;
+    }
+
+    @media (max-width: 920px) { .two-col { grid-template-columns: 1fr; } }
+
+    /* ==================== WELCOME ==================== */
+    .terminal-line {
+      font-family: var(--font-mono);
+      font-size: 0.76rem;
+      color: var(--emerald-soft);
+      margin-bottom: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      min-height: 1.2em;
+    }
+
+    .terminal-line .caret {
+      width: 8px;
+      height: 14px;
+      background: var(--emerald-soft);
+      animation: blink 1s steps(1) infinite;
+    }
+
+    @keyframes blink { 50% { opacity: 0; } }
+
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 0.8rem;
+      letter-spacing: -0.01em;
+    }
+
+    .grad-text {
+      background: linear-gradient(90deg, #22d3ee, #a78bfa, #34d399);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+    }
+
+    .hero-desc {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      margin-bottom: 1.4rem;
+      max-width: 52ch;
+    }
+
+    .pillars {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.6rem;
+      margin-bottom: 1.6rem;
+    }
+
+    @media (max-width: 480px) { .pillars { grid-template-columns: repeat(2, 1fr); } }
+
+    .pillar {
+      padding: 0.7rem 0.5rem;
+      border-radius: var(--radius-sm);
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid var(--border-subtle);
+      text-align: center;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .pillar:hover { transform: translateY(-2px); border-color: var(--pc); }
+
+    .pillar-letter {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1.3rem;
+      display: block;
+      color: var(--pc);
+      text-shadow: 0 0 14px var(--pc);
+    }
+
+    .pillar-name { font-size: 0.72rem; color: var(--text-secondary); }
+
+    .input-label {
+      display: block;
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      font-weight: 500;
+      color: #a5f3fc;
+      margin-bottom: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .input-wrap { position: relative; }
+
+    .input-prefix {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      font-family: var(--font-mono);
+      color: var(--cyan);
+      pointer-events: none;
+    }
+
+    .text-input {
+      width: 100%;
+      padding: 0.95rem 1rem 0.95rem 2.2rem;
+      border-radius: var(--radius-md);
+      background: rgba(6, 11, 24, 0.92);
+      border: 1.5px solid rgba(56, 189, 248, 0.32);
+      color: var(--text-primary);
+      font-size: 1rem;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .text-input:focus {
+      border-color: var(--cyan);
+      box-shadow: 0 0 0 4px rgba(34, 211, 238, 0.16);
+    }
+
+    .text-input.invalid { border-color: var(--rose-soft); }
+    .text-input::placeholder { color: var(--text-muted); }
+
+    .input-error {
+      color: var(--rose-soft);
+      font-size: 0.8rem;
+      margin-top: 0.45rem;
+    }
+
+    .rules {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.6rem;
+      margin: 1.2rem 0 1.4rem;
+    }
+
+    @media (max-width: 520px) { .rules { grid-template-columns: 1fr; } }
+
+    .rule {
+      padding: 0.7rem 0.8rem;
+      border-radius: var(--radius-sm);
+      background: rgba(34, 211, 238, 0.06);
+      border: 1px dashed rgba(34, 211, 238, 0.28);
+      font-size: 0.78rem;
+      color: #bae6fd;
+      line-height: 1.4;
+    }
+
+    .rule strong { display: block; font-family: var(--font-mono); font-size: 0.95rem; color: #fff; }
+
+    .kbd-hint {
+      margin-top: 0.85rem;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    kbd {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      padding: 0.1rem 0.4rem;
+      border-radius: 5px;
+      border: 1px solid var(--border-subtle);
+      background: rgba(30, 41, 59, 0.8);
+      color: var(--text-secondary);
+    }
+
+    /* ==================== BUTTONS ==================== */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.55rem;
+      border-radius: var(--radius-md);
+      font-family: var(--font-display);
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.16s ease, box-shadow 0.16s ease, background 0.2s ease, border-color 0.2s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .btn:active { transform: scale(0.98); }
+
+    .btn-primary {
+      width: 100%;
+      padding: 1rem 1.5rem;
+      border: none;
+      background: linear-gradient(135deg, var(--cyan-deep), #2563eb 55%, var(--purple));
+      color: #fff;
+      font-size: 1.02rem;
+      letter-spacing: 0.04em;
+      box-shadow: 0 8px 26px rgba(34, 211, 238, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-primary::after {
+      content: '';
+      position: absolute;
+      top: 0; bottom: 0;
+      width: 40%;
+      left: -60%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+      transform: skewX(-20deg);
+      transition: left 0.6s ease;
+    }
+
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(34, 211, 238, 0.45); }
+    .btn-primary:hover::after { left: 120%; }
+
+    .btn-auto { width: auto; padding: 0.85rem 1.6rem; }
+
+    .btn-secondary {
+      padding: 0.8rem 1.2rem;
+      border: 1px solid var(--border-glow);
+      background: rgba(15, 23, 42, 0.85);
+      font-size: 0.92rem;
+      font-weight: 600;
+    }
+
+    .btn-secondary:hover { border-color: var(--cyan); background: rgba(34, 211, 238, 0.1); }
+
+    .btn-danger {
+      padding: 0.8rem 1.2rem;
+      border: none;
+      background: linear-gradient(135deg, #e11d48, #9f1239);
+      font-size: 0.92rem;
+    }
+
+    .btn-ghost {
+      padding: 0.42rem 0.75rem;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-subtle);
+      background: rgba(15, 23, 42, 0.6);
+      color: var(--text-secondary);
+      font-family: var(--font-body);
+      font-size: 0.74rem;
+      font-weight: 600;
+    }
+
+    .btn-ghost:hover { color: #fff; border-color: var(--cyan); }
+    .btn-ghost.danger:hover { border-color: var(--rose-soft); color: #fda4af; background: rgba(244, 63, 94, 0.1); }
+
+    /* ==================== LEADERBOARD ==================== */
+    .lb-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-bottom: 1rem;
+      padding-bottom: 0.85rem;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .lb-title {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .lb-count {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .lb-tools { display: flex; gap: 0.4rem; }
+
+    .lb-list {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 0.55rem;
+      max-height: 440px;
+      overflow-y: auto;
+      padding-right: 0.25rem;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(56, 189, 248, 0.3) transparent;
+    }
+
+    .lb-list::-webkit-scrollbar { width: 5px; }
+    .lb-list::-webkit-scrollbar-thumb { background: rgba(56, 189, 248, 0.3); border-radius: 99px; }
+
+    .lb-item {
+      display: grid;
+      grid-template-columns: 38px 1fr auto;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.7rem 0.85rem;
+      border-radius: var(--radius-md);
+      background: rgba(15, 23, 42, 0.72);
+      border: 1px solid var(--border-subtle);
+      animation: rowIn 0.35s ease both;
+    }
+
+    @keyframes rowIn {
+      from { opacity: 0; transform: translateX(-8px); }
+      to { opacity: 1; transform: none; }
+    }
+
+    .lb-item.rank-1 { background: linear-gradient(90deg, rgba(251, 191, 36, 0.16), rgba(15, 23, 42, 0.85)); border-color: rgba(251, 191, 36, 0.45); }
+    .lb-item.rank-2 { background: linear-gradient(90deg, rgba(203, 213, 225, 0.14), rgba(15, 23, 42, 0.85)); border-color: rgba(203, 213, 225, 0.38); }
+    .lb-item.rank-3 { background: linear-gradient(90deg, rgba(217, 119, 6, 0.16), rgba(15, 23, 42, 0.85)); border-color: rgba(217, 119, 6, 0.4); }
+
+    .lb-item.is-me {
+      border-color: var(--cyan);
+      box-shadow: 0 0 0 1px var(--cyan), 0 0 18px rgba(34, 211, 238, 0.3);
+    }
+
+    .lb-rank {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 0.82rem;
+      background: rgba(30, 41, 59, 0.9);
+      color: var(--text-secondary);
+    }
+
+    .rank-1 .lb-rank { background: linear-gradient(135deg, #fde68a, #d97706); color: #1c1203; }
+    .rank-2 .lb-rank { background: linear-gradient(135deg, #f1f5f9, #94a3b8); color: #0f172a; }
+    .rank-3 .lb-rank { background: linear-gradient(135deg, #fdba74, #b45309); color: #1c1203; }
+
+    .lb-name {
+      font-weight: 600;
+      font-size: 0.92rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .me-tag {
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      color: #050914;
+      background: var(--cyan);
+      padding: 0.05rem 0.4rem;
+      border-radius: 6px;
+      margin-left: 0.3rem;
+      vertical-align: 2px;
+    }
+
+    .lb-meta {
+      font-size: 0.73rem;
+      color: var(--text-secondary);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.25rem 0.7rem;
+      margin-top: 0.1rem;
+    }
+
+    .lb-score {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 1rem;
+      color: var(--emerald-soft);
+      text-align: right;
+    }
+
+    .lb-score small { display: block; font-size: 0.64rem; font-weight: 500; color: var(--text-muted); }
+
+    .empty-state {
+      text-align: center;
+      padding: 2.5rem 1rem;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      border: 1px dashed var(--border-subtle);
+      border-radius: var(--radius-md);
+    }
+
+    .empty-state .mono { display: block; color: var(--cyan); margin-bottom: 0.4rem; font-size: 0.8rem; }
+
+    /* ==================== QUIZ ==================== */
+    .quiz-shell { max-width: 880px; width: 100%; margin: 0 auto; }
+
+    .hud { padding: 1rem 1.25rem 0.9rem; margin-bottom: 1rem; }
+
+    .hud-top {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .hud-player { display: flex; align-items: center; gap: 0.65rem; min-width: 0; }
+
+    .hud-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 11px;
+      background: rgba(34, 211, 238, 0.14);
+      border: 1px solid rgba(34, 211, 238, 0.4);
+      color: var(--cyan);
+      display: grid;
+      place-items: center;
+      font-weight: 700;
+      font-family: var(--font-display);
+      flex-shrink: 0;
+    }
+
+    .hud-label {
+      font-family: var(--font-mono);
+      font-size: 0.64rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-secondary);
+    }
+
+    .hud-val {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1.02rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .hud-right { display: flex; align-items: center; justify-content: flex-end; gap: 1rem; }
+    .hud-stat { text-align: right; }
+
+    .hud-score {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 1.2rem;
+      color: var(--emerald-soft);
+      display: inline-block;
+    }
+
+    .hud-score.bump { animation: bump 0.45s ease; }
+    @keyframes bump {
+      40% { transform: scale(1.3); color: #a7f3d0; text-shadow: 0 0 14px var(--emerald); }
+    }
+
+    .hud-streak { font-family: var(--font-mono); font-weight: 700; font-size: 1.05rem; color: var(--orange); }
+    .hud-streak.dim { color: var(--text-muted); }
+
+    /* ring timer */
+    .ring-timer { position: relative; width: 78px; height: 78px; }
+    .ring-timer svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+    .ring-bg { fill: none; stroke: rgba(30, 41, 59, 0.95); stroke-width: 6; }
+    .ring-fg {
+      fill: none;
+      stroke: var(--cyan);
+      stroke-width: 6;
+      stroke-linecap: round;
+      filter: drop-shadow(0 0 5px rgba(34, 211, 238, 0.7));
+      transition: stroke 0.3s ease;
+    }
+
+    .ring-label {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+    }
+
+    .ring-digits { font-family: var(--font-mono); font-weight: 700; font-size: 1.35rem; color: var(--cyan); }
+    .ring-unit { font-family: var(--font-mono); font-size: 0.58rem; color: var(--text-muted); margin-top: 2px; }
+
+    .ring-timer.warning .ring-fg { stroke: var(--rose); filter: drop-shadow(0 0 6px rgba(244, 63, 94, 0.8)); }
+    .ring-timer.warning .ring-digits { color: var(--rose-soft); }
+    .ring-timer.warning { animation: timerPulse 0.8s infinite; }
+    .ring-timer.paused .ring-fg { stroke: var(--text-muted); filter: none; }
+    .ring-timer.paused .ring-digits { color: var(--text-secondary); }
+    .ring-timer.paused { animation: none; }
+
+    @keyframes timerPulse { 50% { transform: scale(1.06); } }
+
+    .progress-dots {
+      display: grid;
+      grid-template-columns: repeat(20, 1fr);
+      gap: 4px;
+      margin-top: 0.9rem;
+    }
+
+    .p-dot {
+      height: 6px;
+      border-radius: 99px;
+      background: rgba(51, 65, 85, 0.8);
+      transition: background 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .p-dot.current { background: var(--cyan); box-shadow: 0 0 8px var(--cyan); animation: pulse 1.4s infinite; }
+    .p-dot.correct { background: var(--emerald); }
+    .p-dot.wrong { background: var(--rose); }
+    .p-dot.timeout { background: #b45309; }
+
+    @media (max-width: 600px) {
+      .hud { padding: 0.85rem 0.9rem 0.8rem; }
+      .hud-top { grid-template-columns: 1fr auto; grid-template-areas: "player ring" "stats ring"; gap: 0.4rem 0.75rem; }
+      .hud-player { grid-area: player; }
+      .ring-timer { grid-area: ring; width: 70px; height: 70px; }
+      .hud-right { grid-area: stats; justify-content: flex-start; }
+      .hud-stat { text-align: left; }
+      .hud-exit-wrap { display: none; }
+    }
+
+    .q-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-bottom: 1.1rem;
+    }
+
+    .domain-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.38rem 0.85rem;
+      border-radius: 999px;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      background: color-mix(in srgb, var(--dc) 14%, transparent);
+      border: 1px solid color-mix(in srgb, var(--dc) 50%, transparent);
+      color: var(--dc);
+    }
+
+    .domain-S { --dc: #67e8f9; }
+    .domain-T { --dc: #d8b4fe; }
+    .domain-E { --dc: #fdba74; }
+    .domain-M { --dc: #6ee7b7; }
+
+    .q-counter {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      background: rgba(15, 23, 42, 0.8);
+      padding: 0.32rem 0.75rem;
+      border-radius: 999px;
+      border: 1px solid var(--border-subtle);
+    }
+
+    .q-counter b { color: #fff; }
+
+    .q-text {
+      font-family: var(--font-display);
+      font-size: clamp(1.2rem, 2.8vw, 1.6rem);
+      font-weight: 700;
+      line-height: 1.38;
+      margin-bottom: 1.5rem;
+      min-height: 2.8em;
+    }
+
+    .options-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.8rem;
+    }
+
+    @media (max-width: 640px) { .options-grid { grid-template-columns: 1fr; gap: 0.65rem; } }
+
+    .option-btn {
+      --oc: var(--opt-a);
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      min-height: 64px;
+      padding: 0.9rem 1rem;
+      border-radius: var(--radius-md);
+      background: linear-gradient(135deg, color-mix(in srgb, var(--oc) 16%, rgba(15, 23, 42, 0.9)), rgba(15, 23, 42, 0.9));
+      border: 1.5px solid color-mix(in srgb, var(--oc) 40%, transparent);
+      text-align: left;
+      font-size: 0.98rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease, opacity 0.25s ease, background 0.25s ease;
+      animation: optIn 0.35s ease both;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .option-btn:nth-child(1) { --oc: var(--opt-a); animation-delay: 0.02s; }
+    .option-btn:nth-child(2) { --oc: var(--opt-b); animation-delay: 0.07s; }
+    .option-btn:nth-child(3) { --oc: var(--opt-c); animation-delay: 0.12s; }
+    .option-btn:nth-child(4) { --oc: var(--opt-d); animation-delay: 0.17s; }
+
+    @keyframes optIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: none; }
+    }
+
+    .option-btn:hover:not(:disabled) {
+      border-color: var(--oc);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 22px color-mix(in srgb, var(--oc) 30%, transparent);
+    }
+
+    .option-btn:disabled { cursor: default; }
+
+    .option-key {
+      width: 34px;
+      height: 34px;
+      border-radius: 9px;
+      background: var(--oc);
+      display: grid;
+      place-items: center;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 0.88rem;
+      color: #fff;
+      flex-shrink: 0;
+      box-shadow: 0 0 12px color-mix(in srgb, var(--oc) 50%, transparent);
+    }
+
+    .option-text { flex: 1; }
+
+    .option-mark {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      display: none;
+      place-items: center;
+      font-weight: 700;
+      flex-shrink: 0;
+      font-size: 0.85rem;
+    }
+
+    .option-btn.correct {
+      background: rgba(16, 185, 129, 0.2);
+      border-color: var(--emerald);
+      box-shadow: 0 0 0 1px var(--emerald), 0 0 26px rgba(16, 185, 129, 0.35);
+      animation: correctPop 0.5s ease;
+    }
+
+    .option-btn.correct .option-key { background: var(--emerald); }
+    .option-btn.correct .option-mark { display: grid; background: var(--emerald); color: #04130d; }
+
+    .option-btn.wrong {
+      background: rgba(244, 63, 94, 0.18);
+      border-color: var(--rose);
+      animation: shake 0.45s ease;
+    }
+
+    .option-btn.wrong .option-key { background: var(--rose); }
+    .option-btn.wrong .option-mark { display: grid; background: var(--rose); color: #fff; }
+
+    .option-btn.dimmed { opacity: 0.38; filter: saturate(0.4); }
+
+    @keyframes correctPop {
+      0% { transform: scale(1); }
+      40% { transform: scale(1.035); }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20% { transform: translateX(-7px); }
+      40% { transform: translateX(7px); }
+      60% { transform: translateX(-4px); }
+      80% { transform: translateX(4px); }
+    }
+
+    .card.flash-correct { animation: flashGreen 0.6s ease; }
+    .card.flash-wrong { animation: flashRed 0.6s ease; }
+    @keyframes flashGreen { 30% { box-shadow: 0 0 0 2px var(--emerald), 0 0 40px rgba(16, 185, 129, 0.45); } }
+    @keyframes flashRed { 30% { box-shadow: 0 0 0 2px var(--rose), 0 0 40px rgba(244, 63, 94, 0.4); } }
+
+    .feedback {
+      margin-top: 1.25rem;
+      padding: 1rem 1.15rem;
+      border-radius: var(--radius-md);
+      border-left: 4px solid var(--cyan);
+      background: rgba(15, 23, 42, 0.92);
+      animation: viewIn 0.3s ease;
+    }
+
+    .feedback.is-correct { border-left-color: var(--emerald); background: rgba(16, 185, 129, 0.08); }
+    .feedback.is-wrong { border-left-color: var(--rose); background: rgba(244, 63, 94, 0.08); }
+
+    .feedback-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 0.4rem;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1.02rem;
+    }
+
+    .feedback.is-correct .feedback-title { color: var(--emerald-soft); }
+    .feedback.is-wrong .feedback-title { color: var(--rose-soft); }
+
+    .points-pill {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      padding: 0.2rem 0.65rem;
+      border-radius: 999px;
+    }
+
+    .feedback.is-correct .points-pill { background: rgba(16, 185, 129, 0.2); color: #6ee7b7; }
+    .feedback.is-wrong .points-pill { background: rgba(244, 63, 94, 0.2); color: #fda4af; }
+
+    .feedback-label {
+      font-family: var(--font-mono);
+      font-size: 0.66rem;
+      letter-spacing: 0.08em;
+      color: var(--cyan);
+      text-transform: uppercase;
+      margin-bottom: 0.2rem;
+    }
+
+    .feedback-desc { font-size: 0.92rem; color: #cbd5e1; line-height: 1.55; }
+
+    .next-row {
+      margin-top: 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .next-row .kbd-hint { margin: 0; }
+
+    @media (max-width: 600px) {
+      .next-row .btn-primary { width: 100%; }
+      .next-row .kbd-hint { display: none; }
+    }
+
+    .mobile-exit { display: none; margin-top: 0.9rem; text-align: center; }
+    @media (max-width: 600px) { .mobile-exit { display: block; } }
+
+    /* ==================== RESULT ==================== */
+    .trophy {
+      width: 78px;
+      height: 78px;
+      border-radius: 22px;
+      background: linear-gradient(135deg, rgba(251, 191, 36, 0.2), rgba(34, 211, 238, 0.2));
+      border: 1.5px solid rgba(251, 191, 36, 0.5);
+      display: grid;
+      place-items: center;
+      margin: 0 auto 1rem;
+      box-shadow: 0 0 34px rgba(251, 191, 36, 0.25);
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float { 50% { transform: translateY(-6px); } }
+
+    .result-title {
+      font-family: var(--font-display);
+      font-size: 1.7rem;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 0.3rem;
+    }
+
+    .result-sub { text-align: center; color: var(--text-secondary); font-size: 0.92rem; margin-bottom: 0.9rem; }
+    .result-sub strong { color: var(--cyan); }
+
+    .rank-banner {
+      text-align: center;
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      color: #fde68a;
+      background: rgba(251, 191, 36, 0.1);
+      border: 1px solid rgba(251, 191, 36, 0.35);
+      border-radius: 999px;
+      padding: 0.4rem 1rem;
+      width: fit-content;
+      margin: 0 auto 1.3rem;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.65rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .stat {
+      padding: 0.9rem 0.8rem;
+      border-radius: var(--radius-md);
+      background: rgba(15, 23, 42, 0.82);
+      border: 1px solid var(--border-subtle);
+      text-align: center;
+    }
+
+    .stat-label {
+      font-family: var(--font-mono);
+      font-size: 0.64rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-secondary);
+      margin-bottom: 0.25rem;
+    }
+
+    .stat-val { font-family: var(--font-mono); font-size: 1.35rem; font-weight: 700; }
+
+    .breakdown { margin-bottom: 1.4rem; display: grid; gap: 0.55rem; }
+
+    .bd-row {
+      display: grid;
+      grid-template-columns: 110px 1fr 44px;
+      align-items: center;
+      gap: 0.7rem;
+      font-size: 0.8rem;
+    }
+
+    .bd-name { color: var(--text-secondary); white-space: nowrap; }
+    .bd-name b { color: var(--dc); font-family: var(--font-display); margin-right: 0.3rem; }
+
+    .bd-track { height: 8px; border-radius: 99px; background: rgba(30, 41, 59, 0.9); overflow: hidden; }
+    .bd-fill { height: 100%; border-radius: 99px; background: var(--dc); box-shadow: 0 0 10px var(--dc); width: 0; transition: width 0.9s cubic-bezier(.2,.8,.2,1); }
+    .bd-val { font-family: var(--font-mono); text-align: right; color: var(--text-primary); }
+
+    .section-label {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 0.6rem;
+    }
+
+    .result-actions { display: grid; gap: 0.65rem; }
+
+    /* ==================== MODAL ==================== */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 60;
+      background: rgba(2, 6, 23, 0.8);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      animation: viewIn 0.2s ease;
+    }
+
+    .modal-box { max-width: 410px; width: 100%; padding: 1.7rem; text-align: center; }
+
+    .modal-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      background: rgba(244, 63, 94, 0.15);
+      border: 1px solid rgba(244, 63, 94, 0.4);
+      color: var(--rose-soft);
+      display: grid;
+      place-items: center;
+      margin: 0 auto 1rem;
+    }
+
+    .modal-title { font-family: var(--font-display); font-size: 1.2rem; margin-bottom: 0.5rem; }
+    .modal-msg { font-size: 0.88rem; color: var(--text-secondary); }
+
+    .modal-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.65rem;
+      margin-top: 1.3rem;
+    }
+
+    /* ==================== FOOTER ==================== */
+    footer {
+      text-align: center;
+      padding: 1rem;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border-subtle);
+      background: rgba(4, 8, 18, 0.6);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+      .bg-scan { display: none; }
+    }
+
+    /* =====================================================================
+       POLISH LAYER — giao diện nâng cấp
+       ===================================================================== */
+    :root {
+      --bg-surface: rgba(12, 20, 40, 0.62);
+      --border-glow: rgba(125, 211, 252, 0.18);
+      --radius-lg: 26px;
+      --radius-md: 16px;
+      --radius-sm: 12px;
+    }
+
+    body { letter-spacing: 0.005em; }
+
+    /* Nền aurora mềm hơn, bớt rối */
+    .bg-gradient {
+      background:
+        radial-gradient(60rem 38rem at 8% -8%, rgba(34, 211, 238, 0.20), transparent 60%),
+        radial-gradient(52rem 36rem at 98% 4%, rgba(168, 85, 247, 0.20), transparent 60%),
+        radial-gradient(60rem 34rem at 50% 112%, rgba(16, 185, 129, 0.13), transparent 60%),
+        linear-gradient(180deg, #050a18 0%, #040812 100%);
+    }
+    .bg-grid { opacity: 0.55; }
+    #neuralCanvas { opacity: 0.4; }
+    .bg-scan { display: none; }
+
+    /* Header */
+    header {
+      background: rgba(5, 10, 24, 0.62);
+      border-bottom: 1px solid rgba(125, 211, 252, 0.12);
+      backdrop-filter: blur(20px) saturate(1.4);
+      -webkit-backdrop-filter: blur(20px) saturate(1.4);
+    }
+    .brand-icon {
+      border-radius: 14px;
+      box-shadow: 0 6px 22px rgba(34, 211, 238, 0.35), inset 0 1px 0 rgba(255,255,255,0.35);
+    }
+    .brand-title { font-size: 1.25rem; letter-spacing: 0.1em; }
+    .status-chip {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: #cbd5e1;
+    }
+    .icon-btn {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+    }
+
+    /* Thẻ kính mờ */
+    .card {
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.055) 0%, rgba(255,255,255,0.015) 100%),
+        var(--bg-surface);
+      border: 1px solid rgba(255,255,255,0.09);
+      box-shadow:
+        0 30px 70px -20px rgba(0, 0, 0, 0.65),
+        0 0 0 1px rgba(34, 211, 238, 0.04),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    }
+    .card::before {
+      height: 1px;
+      background: linear-gradient(90deg, transparent 5%, rgba(34,211,238,0.9), rgba(168,85,247,0.9), rgba(52,211,153,0.9), transparent 95%);
+      opacity: 0.8;
+    }
+    .card.hud-corners::after { display: none; }
+    .pad { padding: 2.1rem; }
+    @media (max-width: 600px) { .pad { padding: 1.25rem; } }
+
+    /* Welcome */
+    .terminal-line {
+      display: inline-flex;
+      padding: 0.35rem 0.8rem;
+      border-radius: 999px;
+      background: rgba(16, 185, 129, 0.08);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      font-size: 0.72rem;
+    }
+    .hero-title {
+      font-size: clamp(2rem, 4.6vw, 3.1rem);
+      line-height: 1.1;
+      letter-spacing: -0.025em;
+      margin: 0.4rem 0 1rem;
+    }
+    .grad-text {
+      background: linear-gradient(95deg, #22d3ee 0%, #818cf8 50%, #34d399 100%);
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero-desc { font-size: 1rem; line-height: 1.65; }
+
+    .pillar {
+      background: linear-gradient(180deg, color-mix(in srgb, var(--pc) 10%, transparent), rgba(255,255,255,0.02));
+      border: 1px solid color-mix(in srgb, var(--pc) 26%, transparent);
+      padding: 0.9rem 0.5rem;
+      border-radius: 16px;
+    }
+    .pillar:hover { transform: translateY(-4px); box-shadow: 0 12px 28px -10px var(--pc); }
+    .pillar-letter { font-size: 1.55rem; }
+
+    .text-input {
+      background: rgba(3, 7, 18, 0.7);
+      border: 1.5px solid rgba(255,255,255,0.12);
+      padding: 1.05rem 1rem 1.05rem 2.3rem;
+      border-radius: 16px;
+    }
+    .text-input:focus { border-color: var(--cyan); box-shadow: 0 0 0 4px rgba(34,211,238,0.14), 0 8px 24px -8px rgba(34,211,238,0.4); }
+
+    .rule {
+      background: rgba(255,255,255,0.035);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px;
+      color: #94a3b8;
+      padding: 0.8rem 0.9rem;
+    }
+    .rule strong { color: #67e8f9; font-size: 1.05rem; margin-bottom: 0.15rem; }
+
+    /* Nút */
+    .btn-primary {
+      background: linear-gradient(120deg, #06b6d4 0%, #3b82f6 50%, #8b5cf6 100%);
+      box-shadow: 0 10px 30px -8px rgba(59,130,246,0.65), inset 0 1px 0 rgba(255,255,255,0.3);
+      border-radius: 16px;
+      padding: 1.05rem 1.5rem;
+    }
+    .btn-primary:hover { box-shadow: 0 16px 38px -8px rgba(99,102,241,0.8), inset 0 1px 0 rgba(255,255,255,0.35); }
+    .btn-secondary { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.12); border-radius: 16px; }
+    .btn-secondary:hover { background: rgba(255,255,255,0.08); border-color: rgba(125,211,252,0.5); }
+    .btn-ghost { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.1); }
+
+    /* Bảng xếp hạng */
+    .lb-item {
+      background: rgba(255,255,255,0.035);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 16px;
+      padding: 0.75rem 0.9rem;
+      transition: transform 0.18s ease, background 0.18s ease;
+    }
+    .lb-item:hover { transform: translateX(3px); background: rgba(255,255,255,0.06); }
+    .lb-item.rank-1 { background: linear-gradient(90deg, rgba(251,191,36,0.2), rgba(255,255,255,0.03)); box-shadow: 0 8px 24px -12px rgba(251,191,36,0.6); }
+    .lb-item.rank-2 { background: linear-gradient(90deg, rgba(203,213,225,0.16), rgba(255,255,255,0.03)); }
+    .lb-item.rank-3 { background: linear-gradient(90deg, rgba(217,119,6,0.2), rgba(255,255,255,0.03)); }
+    .lb-rank { border-radius: 12px; width: 36px; height: 36px; background: rgba(255,255,255,0.07); }
+    .lb-score { font-size: 1.08rem; }
+
+    /* HUD khi chơi */
+    .hud { padding: 1.1rem 1.4rem 1rem; }
+    .hud-avatar {
+      background: linear-gradient(135deg, rgba(34,211,238,0.25), rgba(168,85,247,0.25));
+      border: 1px solid rgba(255,255,255,0.18);
+      color: #fff;
+      border-radius: 14px;
+    }
+    .hud-score { font-size: 1.4rem; text-shadow: 0 0 18px rgba(52,211,153,0.45); }
+    .ring-timer { width: 84px; height: 84px; }
+    .ring-bg { stroke: rgba(255,255,255,0.07); }
+    .ring-fg { stroke: var(--cyan); stroke-width: 6.5; }
+    .ring-digits { font-size: 1.6rem; }
+    .p-dot { height: 5px; background: rgba(255,255,255,0.09); }
+
+    /* Thanh thời gian tuyến tính */
+    .time-bar {
+      height: 5px;
+      border-radius: 99px;
+      background: rgba(255,255,255,0.07);
+      overflow: hidden;
+      margin: -0.2rem 0 1.4rem;
+    }
+    .time-bar span {
+      display: block;
+      height: 100%;
+      width: 100%;
+      transform-origin: left center;
+      border-radius: 99px;
+      background: linear-gradient(90deg, #22d3ee, #34d399);
+      box-shadow: 0 0 12px rgba(34,211,238,0.7);
+      transition: transform 0.12s linear, background 0.3s ease;
+    }
+    .time-bar span.warning { background: linear-gradient(90deg, #f43f5e, #fb923c); box-shadow: 0 0 12px rgba(244,63,94,0.8); }
+    .time-bar span.paused { background: #64748b; box-shadow: none; }
+
+    /* Câu hỏi & đáp án */
+    .q-text {
+      font-size: clamp(1.3rem, 3vw, 1.75rem);
+      line-height: 1.4;
+      letter-spacing: -0.01em;
+      margin-bottom: 1.7rem;
+    }
+    .domain-badge { padding: 0.4rem 0.9rem; }
+    .q-counter { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1); }
+
+    .options-grid { gap: 0.9rem; }
+    .option-btn {
+      min-height: 72px;
+      padding: 0.95rem 1.1rem;
+      border-radius: 18px;
+      background: linear-gradient(135deg, color-mix(in srgb, var(--oc) 13%, rgba(255,255,255,0.03)), rgba(255,255,255,0.02));
+      border: 1.5px solid color-mix(in srgb, var(--oc) 32%, rgba(255,255,255,0.06));
+      font-size: 1rem;
+      font-weight: 500;
+      line-height: 1.4;
+    }
+    .option-btn:hover:not(:disabled) {
+      transform: translateY(-3px);
+      background: linear-gradient(135deg, color-mix(in srgb, var(--oc) 22%, rgba(255,255,255,0.03)), rgba(255,255,255,0.03));
+      box-shadow: 0 14px 30px -12px color-mix(in srgb, var(--oc) 70%, transparent);
+    }
+    .option-key {
+      width: 38px; height: 38px;
+      border-radius: 12px;
+      background: linear-gradient(145deg, color-mix(in srgb, var(--oc) 100%, #fff 18%), var(--oc));
+      box-shadow: 0 6px 14px -4px color-mix(in srgb, var(--oc) 70%, transparent), inset 0 1px 0 rgba(255,255,255,0.35);
+    }
+    .option-btn.correct { background: linear-gradient(135deg, rgba(16,185,129,0.28), rgba(16,185,129,0.1)); }
+    .option-btn.wrong { background: linear-gradient(135deg, rgba(244,63,94,0.26), rgba(244,63,94,0.08)); }
+
+    .feedback { border-radius: 18px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07); border-left-width: 4px; }
+    .feedback.is-correct { background: linear-gradient(90deg, rgba(16,185,129,0.12), rgba(255,255,255,0.02)); border-left-color: var(--emerald); }
+    .feedback.is-wrong { background: linear-gradient(90deg, rgba(244,63,94,0.12), rgba(255,255,255,0.02)); border-left-color: var(--rose); }
+
+    /* Kết quả */
+    .trophy { border-radius: 26px; width: 88px; height: 88px; box-shadow: 0 0 50px rgba(251,191,36,0.3); }
+    .result-title { font-size: 2rem; letter-spacing: -0.02em; }
+    .stat {
+      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 18px;
+      padding: 1.05rem 0.8rem;
+    }
+    .stat-val { font-size: 1.6rem; }
+    .bd-track { background: rgba(255,255,255,0.07); height: 9px; }
+
+    footer { background: transparent; border-top: 1px solid rgba(255,255,255,0.06); }
+  </style>
+</head>
+<body>
+  <!-- Background layers -->
+  <div class="bg-layer bg-gradient"></div>
+  <div class="bg-layer bg-grid"></div>
+  <canvas id="neuralCanvas" class="bg-layer" aria-hidden="true"></canvas>
+  <div class="bg-layer bg-scan" aria-hidden="true"></div>
+
+  <!-- Header -->
+  <header>
+    <div class="header-inner">
+      <button type="button" class="brand" id="brandBtn" aria-label="Về trang chủ">
+        <div class="brand-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="2.5"></circle>
+            <ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(30 12 12)"></ellipse>
+            <ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(-30 12 12)"></ellipse>
+            <ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(90 12 12)"></ellipse>
+          </svg>
+        </div>
+        <div style="min-width:0;">
+          <div class="brand-title">STEM ARENA</div>
+          <div class="brand-sub">AI · Quiz · Leaderboard</div>
+        </div>
+      </button>
+
+      <div class="header-right">
+        <div class="status-chip">
+          <span class="pulse-dot"></span>
+          <span id="headerInfo">20 câu · 15s/câu</span>
+        </div>
+        <button type="button" class="icon-btn" id="soundBtn" aria-label="Bật/tắt âm thanh" title="Bật/tắt âm thanh">
+          <svg id="soundOnIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path></svg>
+          <svg id="soundOffIcon" class="hidden" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- ==================== 1. WELCOME ==================== -->
+    <section id="welcomeView" class="view two-col">
+      <div class="card hud-corners pad">
+        <div class="terminal-line"><span>&gt;</span><span id="bootText"></span><span class="caret"></span></div>
+
+        <h1 class="hero-title">Đấu Trường Trí Tuệ<br><span class="grad-text">STEM &amp; AI Arena</span></h1>
+        <p class="hero-desc">
+          20 câu hỏi tốc độ cao qua 4 trụ cột Khoa học · Công nghệ AI · Kỹ thuật · Toán học. Trả lời càng nhanh, điểm thưởng càng lớn!
+        </p>
+
+        <div class="pillars">
+          <div class="pillar" style="--pc:#22d3ee;"><span class="pillar-letter">S</span><span class="pillar-name">Science</span></div>
+          <div class="pillar" style="--pc:#c084fc;"><span class="pillar-letter">T</span><span class="pillar-name">Tech &amp; AI</span></div>
+          <div class="pillar" style="--pc:#fb923c;"><span class="pillar-letter">E</span><span class="pillar-name">Engineering</span></div>
+          <div class="pillar" style="--pc:#34d399;"><span class="pillar-letter">M</span><span class="pillar-name">Mathematics</span></div>
+        </div>
+
+        <form id="startForm" novalidate>
+          <label for="playerNameInput" class="input-label">// Tên người chơi hoặc đội thi</label>
+          <div class="input-wrap">
+            <span class="input-prefix">$</span>
+            <input type="text" id="playerNameInput" class="text-input" placeholder="VD: Đội CyberNova / Nguyễn Văn A" maxlength="32" autocomplete="off" enterkeyhint="go" />
+          </div>
+          <div id="nameError" class="input-error hidden">Vui lòng nhập tên (2–32 ký tự) để ghi danh lên bảng xếp hạng.</div>
+
+          <div class="rules">
+            <div class="rule"><strong id="ruleTime">15 giây</strong>mỗi câu hỏi</div>
+            <div class="rule"><strong>100 + 50</strong>điểm cơ bản + thưởng tốc độ</div>
+            <div class="rule"><strong>Điểm → Thời gian</strong>tiêu chí xếp hạng</div>
+          </div>
+
+          <button type="submit" class="btn btn-primary">
+            <span>BẮT ĐẦU THI NGAY</span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </button>
+          <p class="kbd-hint">Mẹo: dùng phím <kbd>A</kbd> <kbd>B</kbd> <kbd>C</kbd> <kbd>D</kbd> (hoặc <kbd>1</kbd>–<kbd>4</kbd>) để chọn đáp án, <kbd>Enter</kbd> để qua câu.</p>
+        </form>
+      </div>
+
+      <div class="card pad">
+        <div class="lb-header">
+          <div class="lb-title">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path><path d="M4 22h16"></path><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path></svg>
+            <span>Bảng Xếp Hạng</span>
+            <span class="lb-count" id="welcomeLbCount"></span>
+          </div>
+          <div class="lb-tools">
+            <button type="button" class="btn btn-ghost" data-action="export" title="Xuất CSV cho Ban Tổ Chức">⭳ CSV</button>
+            <button type="button" class="btn btn-ghost danger" data-action="reset" title="Dành cho Ban Tổ Chức">Xóa dữ liệu</button>
+          </div>
+        </div>
+        <div id="welcomeLeaderboardList" class="lb-list"></div>
+      </div>
+    </section>
+
+    <!-- ==================== 2. QUIZ ==================== -->
+    <section id="quizView" class="view quiz-shell hidden">
+      <div class="card hud">
+        <div class="hud-top">
+          <div class="hud-player">
+            <div class="hud-avatar" id="hudAvatar">S</div>
+            <div style="min-width:0;">
+              <div class="hud-label">Thí sinh / Đội</div>
+              <div class="hud-val" id="hudPlayerName">Player</div>
+            </div>
+          </div>
+
+          <div class="ring-timer" id="ringTimer" role="timer" aria-live="off">
+            <svg viewBox="0 0 80 80" aria-hidden="true">
+              <circle class="ring-bg" cx="40" cy="40" r="34"></circle>
+              <circle class="ring-fg" id="ringFg" cx="40" cy="40" r="34"></circle>
+            </svg>
+            <div class="ring-label">
+              <span class="ring-digits" id="timerDisplay">15</span>
+              <span class="ring-unit">GIÂY</span>
+            </div>
+          </div>
+
+          <div class="hud-right">
+            <div class="hud-stat">
+              <div class="hud-label">Chuỗi</div>
+              <div class="hud-streak dim" id="hudStreak">×0</div>
+            </div>
+            <div class="hud-stat">
+              <div class="hud-label">Điểm</div>
+              <div class="hud-score" id="hudScore">0</div>
+            </div>
+            <div class="hud-exit-wrap">
+              <button type="button" class="icon-btn" id="exitQuizBtn" title="Thoát lượt thi" aria-label="Thoát lượt thi">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="progress-dots" id="progressDots" aria-hidden="true"></div>
+      </div>
+
+      <div class="card hud-corners pad" id="questionCard">
+        <div class="time-bar" aria-hidden="true"><span id="timeBarFill"></span></div>
+        <div class="q-meta">
+          <span class="domain-badge domain-S" id="domainBadge">
+            <span id="domainIcon">🔬</span>
+            <span id="domainLabel">Science • Khoa học</span>
+          </span>
+          <span class="q-counter" id="questionCounter">Câu <b>1</b> / 20</span>
+        </div>
+
+        <h2 class="q-text" id="questionText">Đang tải câu hỏi...</h2>
+
+        <div class="options-grid" id="optionsContainer"></div>
+
+        <div id="feedbackBox" class="feedback hidden" aria-live="polite">
+          <div class="feedback-head">
+            <span class="feedback-title" id="feedbackTitle"></span>
+            <span class="points-pill" id="feedbackPoints"></span>
+          </div>
+          <div class="feedback-label">// Giải thích</div>
+          <p class="feedback-desc" id="feedbackExplanation"></p>
+        </div>
+
+        <div id="nextRow" class="next-row hidden">
+          <span class="kbd-hint">Nhấn <kbd>Enter</kbd> để tiếp tục</span>
+          <button type="button" class="btn btn-primary btn-auto" id="nextBtn">
+            <span id="nextBtnLabel">Câu tiếp theo</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="mobile-exit">
+        <button type="button" class="btn btn-ghost" id="exitQuizBtnMobile">Thoát lượt thi</button>
+      </div>
+    </section>
+
+    <!-- ==================== 3. RESULT ==================== -->
+    <section id="resultView" class="view two-col hidden">
+      <div class="card hud-corners pad">
+        <div class="trophy">
+          <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path><path d="M4 22h16"></path><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path></svg>
+        </div>
+
+        <h2 class="result-title" id="resultTitle">Hoàn thành thử thách!</h2>
+        <p class="result-sub" id="resultSub"></p>
+        <div class="rank-banner" id="rankBanner"></div>
+
+        <div class="stats">
+          <div class="stat"><div class="stat-label">Tổng điểm</div><div class="stat-val" style="color:#34d399;" id="resTotalScore">0</div></div>
+          <div class="stat"><div class="stat-label">Số câu đúng</div><div class="stat-val" style="color:#22d3ee;" id="resCorrectCount">0/20</div></div>
+          <div class="stat"><div class="stat-label">Tổng thời gian</div><div class="stat-val" style="color:#c084fc;" id="resTotalTime">0s</div></div>
+          <div class="stat"><div class="stat-label">Chuỗi đúng dài nhất</div><div class="stat-val" style="color:#fb923c;" id="resBestStreak">0</div></div>
+        </div>
+
+        <div class="section-label">// Phân tích theo lĩnh vực</div>
+        <div class="breakdown" id="domainBreakdown"></div>
+
+        <div class="result-actions">
+          <button type="button" class="btn btn-primary" id="replayBtn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
+            <span>Chơi lại lượt mới</span>
+          </button>
+          <button type="button" class="btn btn-secondary" id="homeBtn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+            <span>Người chơi mới / Về trang chủ</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="card pad">
+        <div class="lb-header">
+          <div class="lb-title">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.2" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+            <span>Bảng Xếp Hạng</span>
+            <span class="lb-count" id="resultLbCount"></span>
+          </div>
+          <div class="lb-tools">
+            <button type="button" class="btn btn-ghost" data-action="export" title="Xuất CSV cho Ban Tổ Chức">⭳ CSV</button>
+            <button type="button" class="btn btn-ghost danger" data-action="reset">Xóa dữ liệu</button>
+          </div>
+        </div>
+        <div id="resultLeaderboardList" class="lb-list"></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Generic confirm modal -->
+  <div id="modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="card modal-box">
+      <div class="modal-icon">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+      </div>
+      <h3 class="modal-title" id="modalTitle"></h3>
+      <p class="modal-msg" id="modalMsg"></p>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-secondary" id="modalCancel">Hủy bỏ</button>
+        <button type="button" class="btn btn-danger" id="modalConfirm">Xác nhận</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>STEM ARENA · Science · Technology &amp; AI · Engineering · Mathematics</footer>
+
+  <script>
+  (() => {
+    'use strict';
+
+    // ==================== 1. NGÂN HÀNG CÂU HỎI ====================
+    // a = chỉ số đáp án đúng trong mảng o (gốc). fixed = giữ nguyên thứ tự đáp án (dạng số).
+    const DOMAINS = {
+      S: { name: 'Science • Khoa học', short: 'Khoa học', icon: '🔬', color: '#67e8f9' },
+      T: { name: 'Tech & AI • Công nghệ', short: 'Công nghệ AI', icon: '🤖', color: '#d8b4fe' },
+      E: { name: 'Engineering • Kỹ thuật', short: 'Kỹ thuật', icon: '⚙️', color: '#fdba74' },
+      M: { name: 'Mathematics • Toán học', short: 'Toán học', icon: '📐', color: '#6ee7b7' }
+    };
+
+    const QUESTION_BANK = [
+      // ---------- SCIENCE ----------
+      { d: 'S', q: 'Hành tinh nào nóng nhất Hệ Mặt Trời?',
+        o: ['Sao Thủy', 'Sao Kim', 'Sao Hỏa', 'Sao Mộc'], a: 1,
+        e: 'Khí quyển dày đặc ~96% CO₂ của Sao Kim tạo hiệu ứng nhà kính cực mạnh, bề mặt ~465°C — nóng hơn cả Sao Thủy dù ở xa Mặt Trời hơn.' },
+      { d: 'S', q: 'Nhúng chiếc đũa vào cốc nước, ta thấy đũa như bị "gãy". Đây là hiện tượng gì?',
+        o: ['Phản xạ toàn phần', 'Nhiễu xạ ánh sáng', 'Khúc xạ ánh sáng', 'Tán sắc ánh sáng'], a: 2,
+        e: 'Ánh sáng bị đổi hướng khi đi qua mặt phân cách nước – không khí (hai môi trường có chiết suất khác nhau) → khúc xạ ánh sáng.' },
+      { d: 'S', q: 'Tia nào trong ánh nắng giúp da tổng hợp Vitamin D?',
+        o: ['Tia hồng ngoại (IR)', 'Tia cực tím (UV)', 'Tia X', 'Sóng vi ba'], a: 1,
+        e: 'Tia UVB giúp da tạo Vitamin D3. Tuy nhiên tiếp xúc quá nhiều có thể gây cháy nắng và tổn thương DNA tế bào da.' },
+      { d: 'S', q: 'Đơn vị đo cường độ dòng điện trong hệ SI là gì?',
+        o: ['Vôn (V)', 'Ôm (Ω)', 'Oát (W)', 'Ampe (A)'], a: 3,
+        e: 'Ampe (A) là đơn vị cường độ dòng điện, đặt theo tên nhà vật lý người Pháp André-Marie Ampère.' },
+      { d: 'S', q: 'Khi quang hợp, cây xanh hấp thụ khí gì và thải ra khí gì?',
+        o: ['Hút O₂ – thải CO₂', 'Hút CO₂ – thải O₂', 'Hút N₂ – thải O₂', 'Hút H₂ – thải CO₂'], a: 1,
+        e: 'Nhờ ánh sáng và diệp lục, cây dùng CO₂ + nước để tạo chất hữu cơ (glucose) và giải phóng khí O₂.' },
+
+      // ---------- TECHNOLOGY & AI ----------
+      { d: 'T', q: '"LLM" — công nghệ lõi của ChatGPT, Gemini, Claude — là viết tắt của?',
+        o: ['Large Language Model', 'Linear Logic Machine', 'Low Latency Memory', 'Learning Loop Module'], a: 0,
+        e: 'Large Language Model — Mô hình ngôn ngữ lớn, được huấn luyện trên lượng văn bản khổng lồ để hiểu và tạo ra ngôn ngữ tự nhiên.' },
+      { d: 'T', q: 'Machine Learning giúp máy tính "học" chủ yếu từ đâu?',
+        o: ['Dữ liệu', 'Luật viết sẵn cho mọi tình huống', 'Phần cứng mạnh hơn', 'Kết nối Internet'], a: 0,
+        e: 'Thay vì lập trình từng luật thủ công, Machine Learning tự tìm ra quy luật từ dữ liệu mẫu. Dữ liệu càng tốt, mô hình càng chính xác.' },
+      { d: 'T', q: 'Chatbot AI bịa ra thông tin sai nhưng nghe rất thuyết phục. Hiện tượng này gọi là gì?',
+        o: ['Ảo giác AI (Hallucination)', 'Ép xung (Overclock)', 'Lỗi 404', 'Phân mảnh ổ cứng'], a: 0,
+        e: 'AI tạo sinh dự đoán từ ngữ "hợp lý nhất" chứ không tra cứu sự thật, nên đôi khi bịa thông tin. Luôn kiểm chứng câu trả lời của AI!' },
+      { d: 'T', q: 'Câu lệnh / mô tả bạn nhập vào để yêu cầu AI tạo nội dung gọi là gì?',
+        o: ['Prompt', 'Cookie', 'Firmware', 'Pixel'], a: 0,
+        e: 'Prompt càng rõ ràng (mục tiêu, bối cảnh, định dạng mong muốn) thì kết quả AI trả về càng sát ý.' },
+      { d: 'T', q: 'Ngôn ngữ lập trình nào phổ biến nhất để phát triển AI?',
+        o: ['Python', 'HTML', 'CSS', 'SQL'], a: 0,
+        e: 'Python dễ đọc và có hệ sinh thái AI rất mạnh: PyTorch, TensorFlow, scikit-learn, Pandas… (HTML/CSS là ngôn ngữ đánh dấu/định dạng web).' },
+
+      // ---------- ENGINEERING ----------
+      { d: 'E', q: 'Xe robot tránh vật cản thường dùng cảm biến nào để đo khoảng cách bằng sóng âm?',
+        o: ['Cảm biến nhiệt độ', 'Cảm biến siêu âm', 'Cảm biến độ ẩm', 'Cảm biến ánh sáng'], a: 1,
+        e: 'Cảm biến siêu âm (VD: HC-SR04) phát xung sóng âm tần số cao, đo thời gian sóng dội lại để tính khoảng cách tới vật cản.' },
+      { d: 'E', q: 'Robot cần truyền chuyển động quay giữa hai trục ở xa nhau mà không bị trượt. Nên dùng gì?',
+        o: ['Dây chun trơn', 'Xích – nhông hoặc đai răng', 'Vòng bi', 'Lò xo nén'], a: 1,
+        e: 'Xích – nhông hay đai răng – puly ăn khớp theo từng răng nên truyền động chính xác, đồng bộ và không trượt.' },
+      { d: 'E', q: 'Cầu giàn và cột điện cao thế dùng nhiều hình gì vì khó biến dạng khi chịu lực?',
+        o: ['Hình vuông', 'Hình tam giác', 'Hình ngũ giác', 'Hình bình hành'], a: 1,
+        e: 'Tam giác giữ nguyên hình dạng khi 3 cạnh không đổi độ dài, nên phân bố lực tốt và tạo kết cấu cứng vững. Hình vuông dễ bị "xô" thành hình bình hành.' },
+      { d: 'E', q: 'Cầu dây văng (như cầu Nhật Tân) đỡ mặt cầu chủ yếu nhờ bộ phận nào?',
+        o: ['Vòm gạch', 'Cáp thép nối lên trụ tháp', 'Phao nổi', 'Hệ bánh răng'], a: 1,
+        e: 'Các bó cáp thép cường độ cao căng xiên từ trụ tháp xuống giữ dầm cầu, truyền tải trọng lên trụ, cho phép vượt nhịp rất lớn.' },
+      { d: 'E', q: 'Thử nghiệm nguyên mẫu (prototype) phát hiện lỗi. Bước tiếp theo là gì?',
+        o: ['Hủy dự án', 'Cải tiến thiết kế rồi thử lại', 'Sản xuất hàng loạt ngay', 'Đổi tên nhóm'], a: 1,
+        e: 'Quy trình thiết kế kỹ thuật là vòng lặp: Chế tạo → Thử nghiệm → Phân tích lỗi → Cải tiến (Iterate) cho đến khi đạt yêu cầu.' },
+
+      // ---------- MATHEMATICS ----------
+      { d: 'M', q: 'Số π làm tròn đến 4 chữ số thập phân là bao nhiêu?',
+        o: ['3,1412', '3,1415', '3,1416', '3,1426'], a: 2, fixed: true,
+        e: 'π ≈ 3,14159… Chữ số thập phân thứ 5 là 9 (≥ 5) nên làm tròn lên: 3,1416.' },
+      { d: 'M', q: 'Hình lập phương có bao nhiêu cạnh và bao nhiêu mặt?',
+        o: ['8 cạnh, 6 mặt', '12 cạnh, 6 mặt', '12 cạnh, 8 mặt', '6 cạnh, 4 mặt'], a: 1, fixed: true,
+        e: 'Hình lập phương có 6 mặt vuông, 12 cạnh bằng nhau và 8 đỉnh.' },
+      { d: 'M', q: 'Tung đồng xu cân đối 2 lần. Xác suất có ít nhất 1 lần ngửa?',
+        o: ['1/4', '1/2', '3/4', '1'], a: 2, fixed: true,
+        e: '4 kết quả: NN, NS, SN, SS. Có 3 kết quả chứa ít nhất 1 mặt ngửa → 3/4 = 75%.' },
+      { d: 'M', q: 'Số tiếp theo của dãy Fibonacci: 1, 1, 2, 3, 5, 8, 13, … ?',
+        o: ['18', '20', '21', '24'], a: 2, fixed: true,
+        e: 'Mỗi số bằng tổng hai số liền trước: 8 + 13 = 21.' },
+      { d: 'M', q: 'Tam giác vuông có hai cạnh góc vuông 3 cm và 4 cm. Cạnh huyền dài bao nhiêu?',
+        o: ['5 cm', '6 cm', '7 cm', '12 cm'], a: 0, fixed: true,
+        e: 'Định lý Pytago: √(3² + 4²) = √25 = 5 cm.' },
+
+      // ---------- THÊM: SCIENCE ----------
+      { d: 'S', q: 'Ở áp suất khí quyển tiêu chuẩn (mực nước biển), nước sôi ở bao nhiêu độ C?',
+        o: ['90 °C', '100 °C', '110 °C', '120 °C'], a: 1, fixed: true,
+        e: 'Ở 1 atm nước sôi ở 100 °C. Lên núi cao, áp suất thấp hơn nên nước sôi ở nhiệt độ thấp hơn.' },
+      { d: 'S', q: 'Công thức hóa học của muối ăn là gì?',
+        o: ['NaCl', 'KCl', 'CaCO₃', 'NaOH'], a: 0,
+        e: 'Muối ăn là natri clorua (NaCl), tạo bởi ion Na⁺ và Cl⁻.' },
+      { d: 'S', q: 'Bào quan nào được ví như \"nhà máy năng lượng\" của tế bào?',
+        o: ['Nhân tế bào', 'Ty thể', 'Lưới nội chất', 'Không bào'], a: 1,
+        e: 'Ty thể thực hiện hô hấp tế bào, chuyển hóa glucose thành ATP — nguồn năng lượng cho tế bào.' },
+      { d: 'S', q: 'Thả đồng thời một viên bi nặng và một viên bi nhẹ trong chân không, điều gì xảy ra?',
+        o: ['Bi nặng chạm đất trước', 'Bi nhẹ chạm đất trước', 'Hai viên chạm đất cùng lúc', 'Cả hai đứng yên'], a: 2,
+        e: 'Trong chân không không có lực cản, mọi vật rơi với cùng gia tốc g ≈ 9,8 m/s², không phụ thuộc khối lượng.' },
+      { d: 'S', q: 'Dung dịch có pH = 3 có tính chất gì?',
+        o: ['Axit', 'Trung tính', 'Bazơ', 'Muối'], a: 0,
+        e: 'Thang pH: dưới 7 là axit, bằng 7 là trung tính, trên 7 là bazơ. pH càng thấp, axit càng mạnh.' },
+      { d: 'S', q: 'Phân tử DNA mang thông tin di truyền có cấu trúc dạng nào?',
+        o: ['Chuỗi thẳng đơn', 'Xoắn kép', 'Hình cầu rỗng', 'Mạng lưới phẳng'], a: 1,
+        e: 'Watson và Crick (1953) mô tả DNA là cấu trúc xoắn kép gồm hai mạch liên kết theo nguyên tắc bổ sung A–T, G–C.' },
+      { d: 'S', q: 'Âm thanh KHÔNG thể truyền trong môi trường nào?',
+        o: ['Nước', 'Thép', 'Không khí', 'Chân không'], a: 3,
+        e: 'Âm thanh là sóng cơ, cần môi trường vật chất để truyền. Trong chân không (vũ trụ) không có âm thanh.' },
+      { d: 'S', q: 'Theo định luật Ôm, hiệu điện thế U giữa hai đầu điện trở R có dòng I chạy qua bằng?',
+        o: ['U = I × R', 'U = I / R', 'U = R / I', 'U = I + R'], a: 0,
+        e: 'Định luật Ôm: I = U / R, suy ra U = I × R. Ví dụ I = 2 A, R = 5 Ω thì U = 10 V.' },
+
+      // ---------- THÊM: TECHNOLOGY & AI ----------
+      { d: 'T', q: 'Mạng nơ-ron nhân tạo (Neural Network) lấy cảm hứng từ cấu trúc nào?',
+        o: ['Mạng nơ-ron sinh học trong não', 'Lưới điện quốc gia', 'Hệ thống rễ cây', 'Sơ đồ tàu điện ngầm'], a: 0,
+        e: 'Các \"nơ-ron\" nhân tạo nhận tín hiệu, nhân với trọng số rồi truyền đi — mô phỏng lỏng lẻo cách nơ-ron não hoạt động.' },
+      { d: 'T', q: 'Máy tính lưu trữ và xử lý dữ liệu bằng hệ nhị phân. Hệ này chỉ dùng những chữ số nào?',
+        o: ['0 và 1', '1 và 2', '0 đến 9', 'A và B'], a: 0,
+        e: 'Mỗi bit chỉ có 2 trạng thái (0 hoặc 1), tương ứng tắt/bật của mạch điện tử.' },
+      { d: 'T', q: 'Trong lập trình, vòng lặp (loop) dùng để làm gì?',
+        o: ['Lặp lại một khối lệnh nhiều lần', 'Xóa toàn bộ chương trình', 'Tắt máy tính', 'Đổi tên biến tự động'], a: 0,
+        e: 'Vòng lặp (for, while) giúp chạy lại cùng một đoạn lệnh mà không phải viết đi viết lại, ví dụ in dãy số 1 đến 100.' },
+      { d: 'T', q: 'Dạy AI nhận diện ảnh bằng hàng nghìn ảnh đã gắn nhãn \"mèo\" hoặc \"chó\" là kiểu học nào?',
+        o: ['Học có giám sát (Supervised)', 'Học không giám sát', 'Học tăng cường', 'Không phải Machine Learning'], a: 0,
+        e: 'Học có giám sát dùng dữ liệu có nhãn đúng sẵn để mô hình học cách dự đoán nhãn cho dữ liệu mới.' },
+      { d: 'T', q: 'Thiên kiến (bias) của AI thường bắt nguồn chủ yếu từ đâu?',
+        o: ['Dữ liệu huấn luyện thiếu cân bằng', 'Màu vỏ máy tính', 'Tốc độ gõ phím', 'Độ sáng màn hình'], a: 0,
+        e: 'Nếu dữ liệu huấn luyện thiên lệch hoặc thiếu đa dạng, mô hình sẽ học và lặp lại sự thiên lệch đó.' },
+      { d: 'T', q: 'Ổ khóa trên thanh địa chỉ trình duyệt cho biết trang web dùng giao thức mã hóa nào?',
+        o: ['HTTPS', 'FTP', 'SMTP', 'BMP'], a: 0,
+        e: 'HTTPS mã hóa dữ liệu giữa trình duyệt và máy chủ, giúp hạn chế bị nghe lén khi nhập mật khẩu hay thông tin cá nhân.' },
+      { d: 'T', q: 'Biểu đồ nào phù hợp nhất để thể hiện xu hướng thay đổi của dữ liệu theo thời gian?',
+        o: ['Biểu đồ đường', 'Biểu đồ tròn', 'Sơ đồ cây', 'Biểu đồ Venn'], a: 0,
+        e: 'Biểu đồ đường nối các điểm theo trục thời gian nên thấy rõ xu hướng tăng, giảm của dữ liệu.' },
+      { d: 'T', q: '1 byte gồm bao nhiêu bit?',
+        o: ['4', '8', '16', '32'], a: 1, fixed: true,
+        e: '1 byte = 8 bit, biểu diễn được 2⁸ = 256 giá trị khác nhau (0 đến 255).' },
+
+      // ---------- THÊM: ENGINEERING ----------
+      { d: 'E', q: 'Dùng xà beng nâng vật nặng, nên đặt điểm tựa thế nào để đỡ tốn sức nhất?',
+        o: ['Xa vật nặng, gần tay cầm', 'Gần vật nặng, xa tay cầm', 'Ngay tại tay cầm', 'Không cần điểm tựa'], a: 1,
+        e: 'Đòn bẩy: cánh tay đòn phía tay lực càng dài so với phía vật nặng thì lực cần dùng càng nhỏ.' },
+      { d: 'E', q: 'Vì sao đèn LED thường được mắc nối tiếp với một điện trở?',
+        o: ['Hạn chế dòng điện để LED không bị cháy', 'Để LED đổi màu', 'Để tăng điện áp của nguồn', 'Để LED phát ra âm thanh'], a: 0,
+        e: 'LED chịu dòng điện rất nhỏ. Điện trở hạn dòng giúp bảo vệ LED khỏi quá dòng.' },
+      { d: 'E', q: 'Động cơ servo trong cánh tay robot thường được dùng để làm gì?',
+        o: ['Quay chính xác đến một góc định trước', 'Đo nhiệt độ môi trường', 'Lưu trữ dữ liệu', 'Phát sóng Wi-Fi'], a: 0,
+        e: 'Servo có mạch phản hồi vị trí nên điều khiển được góc quay chính xác, rất hợp cho khớp robot.' },
+      { d: 'E', q: 'Vật liệu nào sau đây dẫn điện tốt nhất?',
+        o: ['Đồng', 'Gỗ khô', 'Nhựa PVC', 'Cao su'], a: 0,
+        e: 'Kim loại như đồng có nhiều electron tự do nên dẫn điện tốt, vì vậy được dùng làm lõi dây điện. Gỗ khô, nhựa, cao su là chất cách điện.' },
+      { d: 'E', q: 'Bước đầu tiên của quy trình thiết kế kỹ thuật (Engineering Design Process) là gì?',
+        o: ['Xác định vấn đề và yêu cầu', 'Sản xuất hàng loạt', 'Quảng cáo sản phẩm', 'Bán sản phẩm'], a: 0,
+        e: 'Phải hiểu rõ cần giải quyết vấn đề gì và ràng buộc nào, rồi mới đề xuất ý tưởng, chế tạo nguyên mẫu và thử nghiệm.' },
+      { d: 'E', q: 'Bánh răng nhỏ dẫn động bánh răng lớn thì bánh răng lớn sẽ như thế nào?',
+        o: ['Quay chậm hơn nhưng lực xoắn lớn hơn', 'Quay nhanh hơn và lực xoắn nhỏ hơn', 'Quay cùng tốc độ', 'Không quay'], a: 0,
+        e: 'Tỉ số truyền giảm tốc: bánh lớn quay chậm hơn nhưng tăng mô-men xoắn, như hộp số xe số thấp khi leo dốc.' },
+      { d: 'E', q: 'Arduino là gì?',
+        o: ['Bo mạch vi điều khiển mã nguồn mở', 'Một loại pin sạc', 'Một trình duyệt web', 'Màn hình cảm ứng'], a: 0,
+        e: 'Arduino là bo mạch vi điều khiển dễ lập trình, được dùng nhiều trong robot, cảm biến và các dự án STEM.' },
+      { d: 'E', q: 'Tấm pin mặt trời biến đổi dạng năng lượng nào thành điện năng?',
+        o: ['Quang năng (ánh sáng)', 'Nhiệt năng của nước', 'Cơ năng của gió', 'Hóa năng của pin'], a: 0,
+        e: 'Hiệu ứng quang điện trong tế bào quang điện bán dẫn chuyển ánh sáng Mặt Trời thành dòng điện.' },
+
+      // ---------- THÊM: MATHEMATICS ----------
+      { d: 'M', q: 'Diện tích hình tròn bán kính 2 cm là bao nhiêu?',
+        o: ['2π cm²', '4π cm²', '8π cm²', '16π cm²'], a: 1, fixed: true,
+        e: 'S = π × r² = π × 2² = 4π cm².' },
+      { d: 'M', q: 'Giải phương trình: 2x + 6 = 14. Giá trị của x là?',
+        o: ['3', '4', '5', '10'], a: 1, fixed: true,
+        e: '2x = 14 − 6 = 8, suy ra x = 4.' },
+      { d: 'M', q: '25% của 80 là bao nhiêu?',
+        o: ['15', '20', '25', '40'], a: 1, fixed: true,
+        e: '25% = 1/4, nên 80 × 1/4 = 20.' },
+      { d: 'M', q: 'Số nguyên tố chẵn duy nhất là số nào?',
+        o: ['0', '1', '2', '4'], a: 2, fixed: true,
+        e: 'Số nguyên tố chỉ chia hết cho 1 và chính nó. Mọi số chẵn lớn hơn 2 đều chia hết cho 2 nên không phải số nguyên tố.' },
+      { d: 'M', q: 'Trung bình cộng của ba số 4, 8 và 12 là bao nhiêu?',
+        o: ['6', '8', '10', '12'], a: 1, fixed: true,
+        e: '(4 + 8 + 12) / 3 = 24 / 3 = 8.' },
+      { d: 'M', q: 'Tổng ba góc trong của một tam giác bằng bao nhiêu độ?',
+        o: ['90°', '180°', '270°', '360°'], a: 1, fixed: true,
+        e: 'Trong hình học phẳng, tổng ba góc trong của mọi tam giác luôn bằng 180°.' },
+      { d: 'M', q: 'Giá trị của 2⁵ là bao nhiêu?',
+        o: ['10', '16', '32', '64'], a: 2, fixed: true,
+        e: '2⁵ = 2 × 2 × 2 × 2 × 2 = 32.' },
+      { d: 'M', q: 'Tung một con xúc xắc 6 mặt cân đối, xác suất ra mặt có số chấm chẵn là?',
+        o: ['1/6', '1/3', '1/2', '2/3'], a: 2, fixed: true,
+        e: 'Các mặt chẵn: 2, 4, 6 (3 mặt) trên tổng 6 mặt, nên xác suất = 3/6 = 1/2.' }
+    ];
+
+    // ==================== 2. CẤU HÌNH ====================
+    const CONFIG = {
+      STORAGE_KEY: 'stem_arena_leaderboard_v2',
+      SOUND_KEY: 'stem_arena_sound',
+      QUESTIONS_PER_DOMAIN: 5, // mỗi lượt thi: 5 câu/lĩnh vực × 4 = 20 câu
+      TIME_LIMIT: 15,          // giây mỗi câu
+      WARNING_AT: 5,           // đổi màu cảnh báo khi còn ≤ 5s
+      BASE_POINTS: 100,
+      MAX_SPEED_BONUS: 50,
+      MAX_ENTRIES: 100,
+      SHUFFLE_QUESTIONS: true,
+      SHUFFLE_OPTIONS: true
+    };
+
+    const KEYS = ['A', 'B', 'C', 'D'];
+    const RING_C = 2 * Math.PI * 34;
+
+    // ==================== 3. TRẠNG THÁI ====================
+    // phase: 'idle' | 'question' | 'answered' | 'finished'
+    const state = {
+      playerName: '',
+      questions: [],
+      index: 0,
+      score: 0,
+      correctCount: 0,
+      streak: 0,
+      bestStreak: 0,
+      totalElapsedMs: 0,
+      questionStart: 0,
+      timerId: null,
+      lastTickSecond: null,
+      phase: 'idle',
+      results: [],
+      lastEntryId: null
+    };
+
+    const $ = (id) => document.getElementById(id);
+
+    // ==================== 4. TIỆN ÍCH ====================
+    function shuffle(arr) {
+      const a = arr.slice();
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+
+    function escapeHTML(str) {
+      return String(str)
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    }
+
+    function formatDuration(seconds) {
+      const s = Math.max(0, Math.round(Number(seconds) || 0));
+      const m = Math.floor(s / 60);
+      const r = s % 60;
+      return m === 0 ? `${r}s` : `${m}p ${String(r).padStart(2, '0')}s`;
+    }
+
+    function formatNumber(n) {
+      return (Number(n) || 0).toLocaleString('vi-VN');
+    }
+
+    function toInt(v, min, max, fallback) {
+      const n = Math.round(Number(v));
+      if (!Number.isFinite(n)) return fallback;
+      return Math.min(max, Math.max(min, n));
+    }
+
+    // ==================== 5. ÂM THANH (Web Audio, không cần file) ====================
+    const Sound = {
+      enabled: true,
+      ctx: null,
+      init() {
+        try { this.enabled = localStorage.getItem(CONFIG.SOUND_KEY) !== 'off'; } catch (e) { /* ignore */ }
+        this.renderIcon();
+      },
+      toggle() {
+        this.enabled = !this.enabled;
+        try { localStorage.setItem(CONFIG.SOUND_KEY, this.enabled ? 'on' : 'off'); } catch (e) { /* ignore */ }
+        this.renderIcon();
+        if (this.enabled) this.play('click');
+      },
+      renderIcon() {
+        $('soundOnIcon').classList.toggle('hidden', !this.enabled);
+        $('soundOffIcon').classList.toggle('hidden', this.enabled);
+      },
+      tone(freq, start, dur, type = 'sine', vol = 0.07) {
+        const ctx = this.ctx;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = type;
+        osc.frequency.value = freq;
+        const t = ctx.currentTime + start;
+        gain.gain.setValueAtTime(0.0001, t);
+        gain.gain.exponentialRampToValueAtTime(vol, t + 0.015);
+        gain.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+        osc.connect(gain).connect(ctx.destination);
+        osc.start(t);
+        osc.stop(t + dur + 0.02);
+      },
+      play(kind) {
+        if (!this.enabled) return;
+        try {
+          const AC = window.AudioContext || window.webkitAudioContext;
+          if (!AC) return;
+          this.ctx = this.ctx || new AC();
+          if (this.ctx.state === 'suspended') this.ctx.resume();
+          switch (kind) {
+            case 'correct': this.tone(660, 0, 0.12, 'triangle'); this.tone(990, 0.1, 0.2, 'triangle'); break;
+            case 'wrong': this.tone(220, 0, 0.18, 'sawtooth', 0.05); this.tone(160, 0.14, 0.25, 'sawtooth', 0.05); break;
+            case 'tick': this.tone(1200, 0, 0.05, 'square', 0.025); break;
+            case 'finish': [523, 659, 784, 1047].forEach((f, i) => this.tone(f, i * 0.11, 0.22, 'triangle')); break;
+            default: this.tone(880, 0, 0.05, 'sine', 0.04);
+          }
+        } catch (e) { /* audio không khả dụng */ }
+      }
+    };
+
+    // ==================== 6. BẢNG XẾP HẠNG (localStorage) ====================
+    function sanitizeEntry(raw) {
+      if (!raw || typeof raw !== 'object') return null;
+      const score = Number(raw.score);
+      if (!Number.isFinite(score) || score < 0) return null;
+      const total = toInt(raw.total, 1, 999, CONFIG.QUESTIONS_PER_DOMAIN * Object.keys(DOMAINS).length);
+      const name = String(raw.name || '').trim().slice(0, 32);
+      if (!name) return null;
+      return {
+        id: String(raw.id || ''),
+        name,
+        score: Math.round(score),
+        correct: toInt(raw.correct, 0, total, 0),
+        total,
+        totalTime: Math.max(0, Number(raw.totalTime) || 0),
+        timestamp: Number(raw.timestamp) || 0
+      };
+    }
+
+    function compareEntries(a, b) {
+      if (b.score !== a.score) return b.score - a.score;      // điểm cao hơn xếp trên
+      if (a.totalTime !== b.totalTime) return a.totalTime - b.totalTime; // nhanh hơn xếp trên
+      return a.timestamp - b.timestamp;                         // hoàn thành trước xếp trên
+    }
+
+    function getLeaderboard() {
+      try {
+        const raw = localStorage.getItem(CONFIG.STORAGE_KEY);
+        if (!raw) return [];
+        const parsed = JSON.parse(raw);
+        if (!Array.isArray(parsed)) return [];
+        return parsed.map(sanitizeEntry).filter(Boolean).sort(compareEntries);
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function persistLeaderboard(list) {
+      try {
+        localStorage.setItem(CONFIG.STORAGE_KEY, JSON.stringify(list));
+        return true;
+      } catch (e) {
+        return false;
+      }
+    }
+
+    function saveEntry(entry) {
+      const list = getLeaderboard();
+      list.push(entry);
+      list.sort(compareEntries);
+      const rank = list.findIndex((x) => x.id === entry.id) + 1;
+      const totalPlayers = list.length;
+      const saved = persistLeaderboard(list.slice(0, CONFIG.MAX_ENTRIES));
+      return { rank, totalPlayers, saved };
+    }
+
+    function renderLeaderboard(containerId, countId, highlightId) {
+      const container = $(containerId);
+      if (!container) return;
+      const list = getLeaderboard();
+      $(countId).textContent = list.length ? `[${list.length}]` : '';
+
+      if (list.length === 0) {
+        container.innerHTML = `<div class="empty-state"><span class="mono">&gt; leaderboard.length === 0</span>Chưa có dữ liệu thi đấu. Hãy là người đầu tiên ghi danh!</div>`;
+        return;
+      }
+
+      container.innerHTML = list.map((item, idx) => {
+        const rank = idx + 1;
+        const rankClass = rank <= 3 ? `rank-${rank}` : '';
+        const isMe = highlightId && item.id === highlightId;
+        const medal = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : `#${rank}`;
+        return `
+          <div class="lb-item ${rankClass} ${isMe ? 'is-me' : ''}" style="animation-delay:${Math.min(idx, 12) * 0.03}s" ${isMe ? 'data-me="1"' : ''}>
+            <div class="lb-rank">${medal}</div>
+            <div style="min-width:0;">
+              <div class="lb-name">${escapeHTML(item.name)}${isMe ? '<span class="me-tag">BẠN</span>' : ''}</div>
+              <div class="lb-meta">
+                <span>✔ ${item.correct}/${item.total}</span>
+                <span>⏱ ${formatDuration(item.totalTime)}</span>
+              </div>
+            </div>
+            <div class="lb-score">${formatNumber(item.score)}<small>điểm</small></div>
+          </div>`;
+      }).join('');
+
+      const me = container.querySelector('[data-me="1"]');
+      if (me) {
+        requestAnimationFrame(() => {
+          container.scrollTop = Math.max(0, me.offsetTop - container.clientHeight / 2 + me.clientHeight / 2);
+        });
+      }
+    }
+
+    function renderAllLeaderboards() {
+      renderLeaderboard('welcomeLeaderboardList', 'welcomeLbCount', state.lastEntryId);
+      renderLeaderboard('resultLeaderboardList', 'resultLbCount', state.lastEntryId);
+    }
+
+    function exportCSV() {
+      const list = getLeaderboard();
+      if (!list.length) {
+        openModal({
+          title: 'Chưa có dữ liệu',
+          message: 'Bảng xếp hạng đang trống, chưa có gì để xuất.',
+          confirmText: 'Đã hiểu',
+          hideCancel: true
+        });
+        return;
+      }
+      const rows = [['Hạng', 'Tên', 'Điểm', 'Số câu đúng', 'Tổng câu', 'Thời gian (giây)', 'Thời điểm']];
+      list.forEach((x, i) => rows.push([
+        i + 1, x.name, x.score, x.correct, x.total, x.totalTime.toFixed(1),
+        x.timestamp ? new Date(x.timestamp).toLocaleString('vi-VN') : ''
+      ]));
+      const csv = rows.map((r) => r.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(',')).join('\r\n');
+      const blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `stem-arena-leaderboard-${new Date().toISOString().slice(0, 10)}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+
+    // ==================== 7. MODAL ====================
+    let modalConfirmHandler = null;
+    let modalReturnFocus = null;
+
+    function openModal({ title, message, confirmText = 'Xác nhận', cancelText = 'Hủy bỏ', onConfirm = null, hideCancel = false }) {
+      $('modalTitle').textContent = title;
+      $('modalMsg').textContent = message;
+      $('modalConfirm').textContent = confirmText;
+      $('modalCancel').textContent = cancelText;
+      $('modalCancel').classList.toggle('hidden', hideCancel);
+      $('modal').querySelector('.modal-actions').style.gridTemplateColumns = hideCancel ? '1fr' : '1fr 1fr';
+      modalConfirmHandler = onConfirm;
+      modalReturnFocus = document.activeElement;
+      $('modal').classList.remove('hidden');
+      (hideCancel ? $('modalConfirm') : $('modalCancel')).focus();
+    }
+
+    function closeModal() {
+      $('modal').classList.add('hidden');
+      modalConfirmHandler = null;
+      if (modalReturnFocus && document.contains(modalReturnFocus) && !modalReturnFocus.disabled) {
+        modalReturnFocus.focus({ preventScroll: true });
+      }
+      modalReturnFocus = null;
+    }
+
+    function isModalOpen() {
+      return !$('modal').classList.contains('hidden');
+    }
+
+    function requestReset() {
+      openModal({
+        title: 'Xóa bảng xếp hạng?',
+        message: 'Thao tác dành cho Ban Tổ Chức. Toàn bộ kết quả đã lưu trên máy này sẽ bị xóa vĩnh viễn và không thể khôi phục. Nên xuất CSV trước khi xóa.',
+        confirmText: 'Xóa toàn bộ',
+        onConfirm: () => {
+          try { localStorage.removeItem(CONFIG.STORAGE_KEY); } catch (e) { /* ignore */ }
+          state.lastEntryId = null;
+          renderAllLeaderboards();
+        }
+      });
+    }
+
+    // ==================== 8. ĐIỀU HƯỚNG ====================
+    function showView(viewId) {
+      ['welcomeView', 'quizView', 'resultView'].forEach((id) => $(id).classList.add('hidden'));
+      const el = $(viewId);
+      el.classList.remove('hidden');
+      // restart view animation
+      el.style.animation = 'none';
+      void el.offsetWidth;
+      el.style.animation = '';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function isQuizInProgress() {
+      return state.phase === 'question' || state.phase === 'answered';
+    }
+
+    function goHome() {
+      stopTimer();
+      state.phase = 'idle';
+      renderLeaderboard('welcomeLeaderboardList', 'welcomeLbCount', state.lastEntryId);
+      showView('welcomeView');
+      const input = $('playerNameInput');
+      input.value = state.playerName || input.value;
+    }
+
+    function requestExitQuiz() {
+      if (!isQuizInProgress()) { goHome(); return; }
+      openModal({
+        title: 'Thoát lượt thi?',
+        message: 'Kết quả của lượt đang chơi sẽ KHÔNG được lưu lên bảng xếp hạng. Đồng hồ vẫn tiếp tục chạy trong lúc bạn cân nhắc.',
+        confirmText: 'Thoát',
+        cancelText: 'Tiếp tục thi',
+        onConfirm: goHome
+      });
+    }
+
+    // ==================== 9. BẮT ĐẦU LƯỢT THI ====================
+    function buildSession() {
+      // Bốc ngẫu nhiên số câu bằng nhau cho mỗi lĩnh vực S-T-E-M, rồi xáo trộn
+      const picked = [];
+      Object.keys(DOMAINS).forEach((k) => {
+        const pool = shuffle(QUESTION_BANK.filter((q) => q.d === k));
+        picked.push(...pool.slice(0, CONFIG.QUESTIONS_PER_DOMAIN));
+      });
+      const ordered = CONFIG.SHUFFLE_QUESTIONS ? shuffle(picked) : picked;
+      return ordered.map((q) => {
+        const idx = q.o.map((_, i) => i);
+        const order = CONFIG.SHUFFLE_OPTIONS && !q.fixed ? shuffle(idx) : idx;
+        return {
+          domain: q.d,
+          question: q.q,
+          options: order.map((i) => q.o[i]),
+          correct: order.indexOf(q.a),
+          explanation: q.e
+        };
+      });
+    }
+
+    function handleStart(e) {
+      e.preventDefault();
+      const input = $('playerNameInput');
+      const name = input.value.replace(/\s+/g, ' ').trim();
+      if (name.length < 2) {
+        $('nameError').classList.remove('hidden');
+        input.classList.add('invalid');
+        input.focus();
+        return;
+      }
+      $('nameError').classList.add('hidden');
+      input.classList.remove('invalid');
+      state.playerName = name;
+      Sound.play('click');
+      beginSession();
+    }
+
+    function beginSession() {
+      stopTimer();
+      Object.assign(state, {
+        questions: buildSession(),
+        index: 0,
+        score: 0,
+        correctCount: 0,
+        streak: 0,
+        bestStreak: 0,
+        totalElapsedMs: 0,
+        results: [],
+        phase: 'idle'
+      });
+
+      $('hudPlayerName').textContent = state.playerName;
+      $('hudAvatar').textContent = state.playerName.charAt(0).toUpperCase();
+      $('hudScore').textContent = '0';
+      updateStreak();
+      renderProgressDots();
+
+      showView('quizView');
+      loadQuestion(0);
+    }
+
+    // ==================== 10. HIỂN THỊ CÂU HỎI & ĐỒNG HỒ ====================
+    function renderProgressDots() {
+      const wrap = $('progressDots');
+      wrap.style.gridTemplateColumns = `repeat(${state.questions.length}, 1fr)`;
+      wrap.innerHTML = state.questions.map((_, i) => {
+        const r = state.results[i];
+        let cls = '';
+        if (r) cls = r.timeout ? 'timeout' : r.correct ? 'correct' : 'wrong';
+        else if (i === state.index && state.phase === 'question') cls = 'current';
+        return `<span class="p-dot ${cls}"></span>`;
+      }).join('');
+    }
+
+    function loadQuestion(index) {
+      stopTimer();
+      state.index = index;
+      const q = state.questions[index];
+      const dom = DOMAINS[q.domain];
+
+      $('domainBadge').className = `domain-badge domain-${q.domain}`;
+      $('domainIcon').textContent = dom.icon;
+      $('domainLabel').textContent = dom.name;
+      $('questionCounter').innerHTML = `Câu <b>${index + 1}</b> / ${state.questions.length}`;
+      $('questionText').textContent = q.question;
+
+      $('optionsContainer').innerHTML = q.options.map((text, i) => `
+        <button type="button" class="option-btn" data-index="${i}" aria-label="Đáp án ${KEYS[i]}: ${escapeHTML(text)}">
+          <span class="option-key">${KEYS[i]}</span>
+          <span class="option-text">${escapeHTML(text)}</span>
+          <span class="option-mark" aria-hidden="true"></span>
+        </button>`).join('');
+
+      $('feedbackBox').classList.add('hidden');
+      $('nextRow').classList.add('hidden');
+      $('questionCard').classList.remove('flash-correct', 'flash-wrong');
+
+      state.phase = 'question';
+      state.lastTickSecond = null;
+      state.questionStart = performance.now();
+      renderProgressDots();
+
+      $('ringTimer').classList.remove('paused');
+      updateTimerVisuals(CONFIG.TIME_LIMIT);
+      state.timerId = setInterval(tick, 100);
+
+      if (window.innerWidth < 900) {
+        $('quizView').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+
+    function getElapsedSec() {
+      return Math.min(CONFIG.TIME_LIMIT, (performance.now() - state.questionStart) / 1000);
+    }
+
+    function tick() {
+      if (state.phase !== 'question') return;
+      const remaining = Math.max(0, CONFIG.TIME_LIMIT - getElapsedSec());
+      updateTimerVisuals(remaining);
+
+      const sec = Math.ceil(remaining);
+      if (sec <= 3 && sec > 0 && sec !== state.lastTickSecond) {
+        state.lastTickSecond = sec;
+        Sound.play('tick');
+      }
+
+      if (remaining <= 0) handleTimeout();
+    }
+
+    function updateTimerVisuals(remaining) {
+      const pct = Math.max(0, Math.min(1, remaining / CONFIG.TIME_LIMIT));
+      const ring = $('ringFg');
+      ring.style.strokeDasharray = `${RING_C}`;
+      ring.style.strokeDashoffset = `${RING_C * (1 - pct)}`;
+      $('timerDisplay').textContent = Math.ceil(remaining);
+      const tb = $('timeBarFill');
+      if (tb) {
+        tb.style.transform = `scaleX(${pct})`;
+        tb.classList.toggle('warning', remaining <= CONFIG.WARNING_AT && state.phase === 'question');
+        tb.classList.toggle('paused', state.phase !== 'question');
+      }
+      $('ringTimer').classList.toggle('warning', remaining <= CONFIG.WARNING_AT && state.phase === 'question');
+    }
+
+    function stopTimer() {
+      if (state.timerId) {
+        clearInterval(state.timerId);
+        state.timerId = null;
+      }
+    }
+
+    // ==================== 11. XỬ LÝ TRẢ LỜI & TÍNH ĐIỂM ====================
+    function lockOptions(correctIdx, selectedIdx) {
+      document.querySelectorAll('#optionsContainer .option-btn').forEach((btn) => {
+        const i = Number(btn.dataset.index);
+        btn.disabled = true;
+        const mark = btn.querySelector('.option-mark');
+        if (i === correctIdx) {
+          btn.classList.add('correct');
+          mark.textContent = '✓';
+        } else if (i === selectedIdx) {
+          btn.classList.add('wrong');
+          mark.textContent = '✕';
+        } else {
+          btn.classList.add('dimmed');
+        }
+      });
+    }
+
+    function selectOption(selectedIdx) {
+      if (state.phase !== 'question') return;
+      const elapsed = getElapsedSec();
+      if (elapsed >= CONFIG.TIME_LIMIT) { handleTimeout(); return; }
+
+      state.phase = 'answered';
+      stopTimer();
+      state.totalElapsedMs += elapsed * 1000;
+
+      const q = state.questions[state.index];
+      const isCorrect = selectedIdx === q.correct;
+      let points = 0;
+
+      if (isCorrect) {
+        const speedRatio = (CONFIG.TIME_LIMIT - elapsed) / CONFIG.TIME_LIMIT;
+        points = CONFIG.BASE_POINTS + Math.round(Math.max(0, speedRatio) * CONFIG.MAX_SPEED_BONUS);
+        state.score += points;
+        state.correctCount += 1;
+        state.streak += 1;
+        state.bestStreak = Math.max(state.bestStreak, state.streak);
+        const scoreEl = $('hudScore');
+        scoreEl.textContent = formatNumber(state.score);
+        scoreEl.classList.remove('bump');
+        void scoreEl.offsetWidth;
+        scoreEl.classList.add('bump');
+        Sound.play('correct');
+      } else {
+        state.streak = 0;
+        Sound.play('wrong');
+      }
+
+      state.results[state.index] = { domain: q.domain, correct: isCorrect, timeout: false, points, time: elapsed };
+      lockOptions(q.correct, selectedIdx);
+      updateStreak();
+      showFeedback(isCorrect, points, q.explanation, false, elapsed);
+    }
+
+    function handleTimeout() {
+      if (state.phase !== 'question') return;
+      state.phase = 'answered';
+      stopTimer();
+      state.totalElapsedMs += CONFIG.TIME_LIMIT * 1000;
+      state.streak = 0;
+
+      const q = state.questions[state.index];
+      state.results[state.index] = { domain: q.domain, correct: false, timeout: true, points: 0, time: CONFIG.TIME_LIMIT };
+      updateTimerVisuals(0);
+      lockOptions(q.correct, -1);
+      updateStreak();
+      Sound.play('wrong');
+      showFeedback(false, 0, q.explanation, true, CONFIG.TIME_LIMIT);
+    }
+
+    function updateStreak() {
+      const el = $('hudStreak');
+      el.textContent = `${state.streak >= 3 ? '🔥' : ''}×${state.streak}`;
+      el.classList.toggle('dim', state.streak === 0);
+    }
+
+    function showFeedback(isCorrect, points, explanation, isTimeout, elapsed) {
+      const box = $('feedbackBox');
+      box.classList.remove('hidden', 'is-correct', 'is-wrong');
+      box.classList.add(isCorrect ? 'is-correct' : 'is-wrong');
+
+      if (isCorrect) {
+        $('feedbackTitle').textContent = `✅ Chính xác! (${elapsed.toFixed(1)}s)`;
+        $('feedbackPoints').textContent = `+${points} điểm`;
+      } else {
+        $('feedbackTitle').textContent = isTimeout ? `⏰ Hết ${CONFIG.TIME_LIMIT} giây!` : '❌ Chưa chính xác!';
+        $('feedbackPoints').textContent = '+0 điểm';
+      }
+      $('feedbackExplanation').textContent = explanation;
+
+      $('ringTimer').classList.add('paused');
+      $('ringTimer').classList.remove('warning');
+
+      const card = $('questionCard');
+      card.classList.remove('flash-correct', 'flash-wrong');
+      void card.offsetWidth;
+      card.classList.add(isCorrect ? 'flash-correct' : 'flash-wrong');
+
+      const isLast = state.index === state.questions.length - 1;
+      $('nextBtnLabel').textContent = isLast ? 'Xem kết quả' : 'Câu tiếp theo';
+      $('nextRow').classList.remove('hidden');
+      renderProgressDots();
+
+      $('nextBtn').focus({ preventScroll: true });
+      requestAnimationFrame(() => $('nextRow').scrollIntoView({ behavior: 'smooth', block: 'nearest' }));
+    }
+
+    function goNext() {
+      if (state.phase !== 'answered') return;
+      if (state.index < state.questions.length - 1) {
+        loadQuestion(state.index + 1);
+      } else {
+        finishQuiz();
+      }
+    }
+
+    // ==================== 12. KẾT THÚC & LƯU KẾT QUẢ ====================
+    function finishQuiz() {
+      if (state.phase === 'finished') return; // chống lưu trùng
+      state.phase = 'finished';
+      stopTimer();
+
+      const total = state.questions.length;
+      const entry = {
+        id: `p-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+        name: state.playerName,
+        score: state.score,
+        correct: state.correctCount,
+        total,
+        totalTime: Math.round(state.totalElapsedMs / 100) / 10, // giữ 0.1s để phân định đồng điểm
+        timestamp: Date.now()
+      };
+
+      const { rank, totalPlayers, saved } = saveEntry(entry);
+      state.lastEntryId = entry.id;
+
+      const accuracy = state.correctCount / total;
+      $('resultTitle').textContent =
+        accuracy === 1 ? 'Hoàn hảo tuyệt đối! 🏆' :
+        accuracy >= 0.8 ? 'Xuất sắc! 🚀' :
+        accuracy >= 0.5 ? 'Làm tốt lắm! ⚡' : 'Hoàn thành thử thách!';
+
+      $('resultSub').innerHTML = `<strong>${escapeHTML(state.playerName)}</strong> đã hoàn thành ${total} câu hỏi STEM &amp; AI.`;
+      $('rankBanner').textContent = saved
+        ? `XẾP HẠNG #${rank} / ${totalPlayers} NGƯỜI CHƠI`
+        : 'Không lưu được kết quả (trình duyệt chặn bộ nhớ)';
+
+      $('resTotalScore').textContent = formatNumber(state.score);
+      $('resCorrectCount').textContent = `${state.correctCount}/${total}`;
+      $('resTotalTime').textContent = formatDuration(entry.totalTime);
+      $('resBestStreak').textContent = state.bestStreak;
+
+      renderBreakdown();
+      renderLeaderboard('resultLeaderboardList', 'resultLbCount', entry.id);
+      showView('resultView');
+      Sound.play('finish');
+    }
+
+    function renderBreakdown() {
+      const stats = {};
+      Object.keys(DOMAINS).forEach((k) => { stats[k] = { ok: 0, total: 0 }; });
+      state.results.forEach((r) => {
+        if (!r || !stats[r.domain]) return;
+        stats[r.domain].total += 1;
+        if (r.correct) stats[r.domain].ok += 1;
+      });
+
+      const wrap = $('domainBreakdown');
+      wrap.innerHTML = Object.keys(DOMAINS).map((k) => {
+        const s = stats[k];
+        const pct = s.total ? Math.round((s.ok / s.total) * 100) : 0;
+        return `
+          <div class="bd-row domain-${k}">
+            <span class="bd-name"><b>${k}</b>${DOMAINS[k].short}</span>
+            <span class="bd-track"><span class="bd-fill" data-pct="${pct}"></span></span>
+            <span class="bd-val">${s.ok}/${s.total}</span>
+          </div>`;
+      }).join('');
+
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        wrap.querySelectorAll('.bd-fill').forEach((el) => { el.style.width = `${el.dataset.pct}%`; });
+      }));
+    }
+
+    // ==================== 13. NỀN MẠNG NEURAL ====================
+    function initNeuralBackground() {
+      const canvas = $('neuralCanvas');
+      const ctx = canvas.getContext && canvas.getContext('2d');
+      if (!ctx) return;
+      const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      let w = 0, h = 0, nodes = [];
+      const LINK = 140;
+
+      function resize() {
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        w = window.innerWidth;
+        h = window.innerHeight;
+        canvas.width = w * dpr;
+        canvas.height = h * dpr;
+        canvas.style.width = `${w}px`;
+        canvas.style.height = `${h}px`;
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        const count = Math.round(Math.min(70, Math.max(22, (w * h) / 24000)));
+        nodes = Array.from({ length: count }, () => ({
+          x: Math.random() * w,
+          y: Math.random() * h,
+          vx: (Math.random() - 0.5) * 0.3,
+          vy: (Math.random() - 0.5) * 0.3
+        }));
+        if (reduceMotion) draw();
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, w, h);
+        for (let i = 0; i < nodes.length; i++) {
+          const a = nodes[i];
+          for (let j = i + 1; j < nodes.length; j++) {
+            const b = nodes[j];
+            const dx = a.x - b.x, dy = a.y - b.y;
+            const dist = Math.hypot(dx, dy);
+            if (dist < LINK) {
+              ctx.strokeStyle = `rgba(34, 211, 238, ${0.16 * (1 - dist / LINK)})`;
+              ctx.lineWidth = 1;
+              ctx.beginPath();
+              ctx.moveTo(a.x, a.y);
+              ctx.lineTo(b.x, b.y);
+              ctx.stroke();
+            }
+          }
+        }
+        ctx.fillStyle = 'rgba(52, 211, 153, 0.7)';
+        nodes.forEach((n) => {
+          ctx.beginPath();
+          ctx.arc(n.x, n.y, 1.6, 0, Math.PI * 2);
+          ctx.fill();
+        });
+      }
+
+      function step() {
+        nodes.forEach((n) => {
+          n.x += n.vx;
+          n.y += n.vy;
+          if (n.x < 0 || n.x > w) n.vx *= -1;
+          if (n.y < 0 || n.y > h) n.vy *= -1;
+        });
+        draw();
+        requestAnimationFrame(step);
+      }
+
+      let resizeTimer;
+      window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(resize, 150);
+      });
+      resize();
+      if (!reduceMotion) requestAnimationFrame(step);
+    }
+
+    function typeBootText() {
+      const el = $('bootText');
+      const text = 'system.boot() → AI quiz engine online';
+      let i = 0;
+      const timer = setInterval(() => {
+        el.textContent = text.slice(0, ++i);
+        if (i >= text.length) clearInterval(timer);
+      }, 40);
+    }
+
+    // ==================== 14. SỰ KIỆN ====================
+    function bindEvents() {
+      $('startForm').addEventListener('submit', handleStart);
+      $('playerNameInput').addEventListener('input', () => {
+        $('nameError').classList.add('hidden');
+        $('playerNameInput').classList.remove('invalid');
+      });
+
+      $('optionsContainer').addEventListener('click', (e) => {
+        const btn = e.target.closest('.option-btn');
+        if (btn && !btn.disabled) selectOption(Number(btn.dataset.index));
+      });
+
+      $('nextBtn').addEventListener('click', goNext);
+      $('brandBtn').addEventListener('click', requestExitQuiz);
+      $('exitQuizBtn').addEventListener('click', requestExitQuiz);
+      $('exitQuizBtnMobile').addEventListener('click', requestExitQuiz);
+      $('replayBtn').addEventListener('click', () => (state.playerName ? beginSession() : goHome()));
+      $('homeBtn').addEventListener('click', () => {
+        state.playerName = '';
+        $('playerNameInput').value = '';
+        goHome();
+        $('playerNameInput').focus({ preventScroll: true });
+      });
+      $('soundBtn').addEventListener('click', () => Sound.toggle());
+
+      document.querySelectorAll('[data-action="reset"]').forEach((b) => b.addEventListener('click', requestReset));
+      document.querySelectorAll('[data-action="export"]').forEach((b) => b.addEventListener('click', exportCSV));
+
+      $('modalCancel').addEventListener('click', closeModal);
+      $('modalConfirm').addEventListener('click', () => {
+        const fn = modalConfirmHandler;
+        closeModal();
+        if (typeof fn === 'function') fn();
+      });
+      $('modal').addEventListener('click', (e) => { if (e.target === $('modal')) closeModal(); });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.ctrlKey || e.metaKey || e.altKey) return;
+
+        if (isModalOpen()) {
+          if (e.key === 'Escape') { e.preventDefault(); closeModal(); }
+          return;
+        }
+
+        if ($('quizView').classList.contains('hidden')) return;
+        if (e.target.closest && e.target.closest('input, textarea')) return;
+
+        if (state.phase === 'question') {
+          const k = e.key.toUpperCase();
+          let idx = KEYS.indexOf(k);
+          if (idx === -1 && /^[1-4]$/.test(e.key)) idx = Number(e.key) - 1;
+          if (idx >= 0 && idx < state.questions[state.index].options.length) {
+            e.preventDefault();
+            selectOption(idx);
+          }
+        } else if (state.phase === 'answered') {
+          // Enter/Space trên nút đang focus đã tự kích hoạt click → tránh gọi 2 lần
+          if ((e.key === 'Enter' || e.key === ' ') && e.target.closest && e.target.closest('button')) return;
+          if (e.key === 'Enter' || e.key === 'ArrowRight' || e.key === ' ') {
+            e.preventDefault();
+            goNext();
+          }
+        }
+
+        if (e.key === 'Escape' && isQuizInProgress()) requestExitQuiz();
+      });
+
+      // Cảnh báo khi đóng/tải lại tab giữa lượt thi
+      window.addEventListener('beforeunload', (e) => {
+        if (isQuizInProgress()) {
+          e.preventDefault();
+          e.returnValue = '';
+        }
+      });
+
+      // Đồng bộ bảng xếp hạng nếu mở nhiều tab trên cùng máy
+      window.addEventListener('storage', (e) => {
+        if (e.key === CONFIG.STORAGE_KEY && !isQuizInProgress()) renderAllLeaderboards();
+      });
+    }
+
+    // ==================== 15. KHỞI TẠO ====================
+    function init() {
+      $('headerInfo').textContent = `${CONFIG.QUESTIONS_PER_DOMAIN * Object.keys(DOMAINS).length} câu · ${CONFIG.TIME_LIMIT}s/câu`;
+      $('ruleTime').textContent = `${CONFIG.TIME_LIMIT} giây`;
+      $('ringFg').style.strokeDasharray = `${RING_C}`;
+      Sound.init();
+      bindEvents();
+      renderLeaderboard('welcomeLeaderboardList', 'welcomeLbCount', null);
+      initNeuralBackground();
+      typeBootText();
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+  })();
+  </script>
+</body>
+</html>
